@@ -114,12 +114,12 @@ class Updater(object):
     @err_catcher(name=__name__)
     def checkForUpdates(self, silent=False):
         logger.debug("checking for updates")
-        url = "https://raw.githubusercontent.com/RichardFrangenberg/Prism/development/Prism/Scripts/PrismCore.py"
+        url = "https://raw.githubusercontent.com/Cine-Chromatix/Prism/main/Prism/Scripts/PrismCore.py?token=AR3EAD3QUBTYHAQPGJNJBH3BRP6RS"
         result = self.getPrismVersionFromGithub(url)
 
         if not result:
             if not silent:
-                msg = "Unable to read https://raw.githubusercontent.com/RichardFrangenberg/Prism/development/Prism/Scripts/PrismCore.py. Could not check for updates."
+                msg = "Unable to read https://raw.githubusercontent.com/Cine-Chromatix/Prism/main/Prism/Scripts/PrismCore.py?token=AR3EAD3QUBTYHAQPGJNJBH3BRP6RS. Could not check for updates."
                 self.core.popup(msg)
             self.core.setConfig(
                 cat="globals",
