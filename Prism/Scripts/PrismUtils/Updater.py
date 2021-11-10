@@ -402,7 +402,7 @@ except Exception as e:
         text = "Downloading Prism - please wait.."
         waitmsg = self.core.popupNoButton(text, title)
 
-        url = url or "https://api.github.com/repos/RichardFrangenberg/Prism/zipball"
+        url = url or "https://api.github.com/repos/Cine-Chromatix/Prism/zipball"
         result = self.getDataFromGithub(url, token=token)
 
         if not result["success"]:
@@ -597,7 +597,7 @@ try:
         sys.path.insert(0, pyLibs)
 
     import requests
-    page = requests.get('https://raw.githubusercontent.com/RichardFrangenberg/Prism/development/changelog.txt', verify=False)
+    page = requests.get('https://raw.githubusercontent.com/Cine-Chromatix/Prism/main/changelog.txt', verify=False)
 
     sys.stdout.write(page.content.decode("utf-8"))
 
@@ -623,7 +623,7 @@ except Exception as e:
 
         if str(stdOutData).startswith("failed"):
             if not silent and self.showChangelogWarnOnError:
-                msg = "Unable to read https://raw.githubusercontent.com/RichardFrangenberg/Prism/development/changelog.txt. Could not get changelog.\n\n(%s)" % stdOutData
+                msg = "Unable to read https://raw.githubusercontent.com/Cine-Chromatix/Prism/main/changelog.txt. Could not get changelog.\n\n(%s)" % stdOutData
                 self.core.popup(msg)
             return
 
