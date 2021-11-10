@@ -489,6 +489,9 @@ class MediaProducts(object):
             hVersion, pComment = version.split(self.core.filenameSeparator)
 
         outputPath = self.getPlayblastPathFromEntity(entity, entityName, task)
+        # ----Hein
+        outputPath = self.core.convertPath(outputPath, location)
+        # ----Hein
 
         if hVersion == "":
             hVersion = self.core.getHighestTaskVersion(outputPath)
