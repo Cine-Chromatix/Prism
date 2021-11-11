@@ -161,7 +161,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             "Date": "Date",
             "User": "User",
             "Name": "Name",
-            "Step": "Step",
+            "Department": "Department",
         }
         self.tw_aHierarchy.setHeaderLabels(["Assets"])
 
@@ -962,7 +962,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 self.curaStep is not None
                 and self.lw_aCategory.indexAt(event.pos()).data() == None
             ):
-                name = "Category"
+                name = "Task"
         elif tab == "ss":
             mIndex = uielement.indexAt(event.pos())
             if mIndex.data() == None:
@@ -988,7 +988,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 self.cursStep is not None
                 and self.lw_sCategory.indexAt(event.pos()).data() == None
             ):
-                name = "Category"
+                name = "Task"
 
         if (
             createCat
@@ -1425,7 +1425,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
     @err_catcher(name=__name__)
     def rclCat(self, tab, pos):
         rcmenu = QMenu(self)
-        typename = "Category"
+        typename = "Task"
         callbackName = ""
 
         if tab == "ah":
@@ -1444,7 +1444,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 return
 
             path = self.core.getEntityPath(entity="step", asset=self.curAsset)
-            typename = "Step"
+            typename = "Department"
             callbackName = "openPBAssetStepContextMenu"
 
         elif tab == "ac":
@@ -1477,7 +1477,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 return False
 
             path = self.core.getEntityPath(entity="step", shot=self.cursShots)
-            typename = "Step"
+            typename = "Department"
             callbackName = "openPBShotStepContextMenu"
 
         elif tab == "sc":
@@ -3089,7 +3089,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             [
                 "",
                 self.tableColumnLabels["Name"],
-                self.tableColumnLabels["Step"],
+                self.tableColumnLabels["Department"],
                 self.tableColumnLabels["Version"],
                 self.tableColumnLabels["Comment"],
                 self.tableColumnLabels["Date"],

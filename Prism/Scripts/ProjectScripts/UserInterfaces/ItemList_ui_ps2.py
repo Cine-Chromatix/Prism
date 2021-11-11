@@ -50,7 +50,7 @@ class Ui_dlg_ItemList(object):
         QtCore.QMetaObject.connectSlotsByName(dlg_ItemList)
 
     def retranslateUi(self, dlg_ItemList):
-        dlg_ItemList.setWindowTitle(QtWidgets.QApplication.translate("dlg_ItemList", "Select Steps", None, -1))
+        dlg_ItemList.setWindowTitle(QtWidgets.QApplication.translate("dlg_ItemList", "Select Department", None, -1))
         self.b_addStep.setText(QtWidgets.QApplication.translate("dlg_ItemList", "Add new", None, -1))
-        self.chb_category.setText(QtWidgets.QApplication.translate("dlg_ItemList", "Create default category", None, -1))
+        self.chb_category.setText(QtWidgets.QApplication.translate("dlg_ItemList", "Create default task", None, -1))
 

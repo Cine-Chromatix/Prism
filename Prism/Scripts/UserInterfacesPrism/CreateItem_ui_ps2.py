@@ -76,11 +76,11 @@ class Ui_dlg_CreateItem(object):
         dlg_CreateItem.setTabOrder(self.rb_asset, self.rb_folder)
 
     def retranslateUi(self, dlg_CreateItem):
-        dlg_CreateItem.setWindowTitle(QtWidgets.QApplication.translate("dlg_CreateItem", "Create Category", None, -1))
+        dlg_CreateItem.setWindowTitle(QtWidgets.QApplication.translate("dlg_CreateItem", "Create Task", None, -1))
         self.label.setText(QtWidgets.QApplication.translate("dlg_CreateItem", "Type:", None, -1))
         self.rb_asset.setText(QtWidgets.QApplication.translate("dlg_CreateItem", "Asset", None, -1))
         self.rb_folder.setText(QtWidgets.QApplication.translate("dlg_CreateItem", "Folder", None, -1))
-        self.l_item.setText(QtWidgets.QApplication.translate("dlg_CreateItem", "Category Name:", None, -1))
+        self.l_item.setText(QtWidgets.QApplication.translate("dlg_CreateItem", "Task Name:", None, -1))
         self.b_showTasks.setToolTip(QtWidgets.QApplication.translate("dlg_CreateItem", "existing tasks", None, -1))
         self.b_showTasks.setText(QtWidgets.QApplication.translate("dlg_CreateItem", "▼", None, -1))
 

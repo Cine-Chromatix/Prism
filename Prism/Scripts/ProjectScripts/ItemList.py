@@ -77,7 +77,7 @@ class ItemList(QDialog, ItemList_ui.Ui_dlg_ItemList):
         self.entity = entity
 
         self.tw_steps.setColumnCount(2)
-        self.tw_steps.setHorizontalHeaderLabels(["Abbreviation", "Step"])
+        self.tw_steps.setHorizontalHeaderLabels(["Abbreviation", "Department"])
         self.tw_steps.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
 
         if entity not in ["asset", "shot"] or (
@@ -92,7 +92,7 @@ class ItemList(QDialog, ItemList_ui.Ui_dlg_ItemList):
         self.btext = "Next"
         if entity in ["asset", "shot"]:
             b = self.buttonBox.addButton(self.btext, QDialogButtonBox.RejectRole)
-            b.setToolTip("Create step and open category dialog")
+            b.setToolTip("Create Department and open Task dialog")
             b.setEnabled(False)
             self.buttonBox.clicked.connect(self.stepBbClicked)
 
@@ -156,7 +156,7 @@ class ItemList(QDialog, ItemList_ui.Ui_dlg_ItemList):
 
             startText = self.core.pb.getSteps().get(step, "")
             self.core.pb.createSteps(self.entity, [step], createCat=False)
-            self.core.pb.createCatWin(tab, "Category", startText=startText)
+            self.core.pb.createCatWin(tab, "Task", startText=startText)
 
     @err_catcher(name=__name__)
     def keyPressEvent(self, event):
