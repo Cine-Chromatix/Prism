@@ -1,5 +1,7 @@
 v1.3.0.83:
-- CXL Modifications
+- CXL Modifications to seperate Branche
+- fix export Playblast to local
+- sends callbacks from click on Categories to Prism_Ftrack-Functions.py
 
 v1.3.0.82:
 - added support for Blender 2.93+
