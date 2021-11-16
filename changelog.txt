@@ -1,3 +1,6 @@
+v1.3.0.84:
+- Add path to steps and cats callback-function
+
 v1.3.0.83:
 - CXL Modifications to seperate Branche
 - fix export Playblast to local

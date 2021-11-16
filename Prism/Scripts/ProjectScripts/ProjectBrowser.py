@@ -1453,11 +1453,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 path = self.core.getEntityPath(asset=self.curAsset, step=self.curaStep)
             else:
                 return False
-            # ----Hein
-            assetname = self.curAsset.split(os.path.sep)[-1]
-            args = [self, assetname, path, 'typename']
-            self.core.callback(name="projectBrowser_getAssetMenu", args=args)
-            # ----Hein
+
             callbackName = "openPBAssetCategoryContextMenu"
 
         elif tab == "ss":
@@ -1486,11 +1482,6 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 path = self.core.getEntityPath(shot=self.cursShots, step=self.cursStep)
             else:
                 return False
-            # ----Hein
-            shotname = self.cursShots
-            args = [self, shotname]
-            self.core.callback(name="projectBrowser_getShotMenu", args=args)
-            # ----Hein
 
             callbackName = "openPBShotCategoryContextMenu"
 
@@ -1598,7 +1589,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             self.core.callback(
                 name=callbackName,
                 types=["custom"],
-                args=[self, rcmenu, lw.indexAt(pos)],
+                args=[self, rcmenu, lw.indexAt(pos), path],
             )
 
         rcmenu.exec_(QCursor.pos())
