@@ -1,3 +1,6 @@
+v1.3.0.85:
+- Make sure we always has nframes in PrismBrowser player
+
 v1.3.0.84:
 - Add path to steps and cats callback-function
 
