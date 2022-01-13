@@ -753,7 +753,15 @@ class Prism_Maya_Functions(object):
             if origin.chb_wholeScene.isChecked():
                 mel.eval('FBXExport -f "%s"' % outputName.replace("\\", "\\\\"))
             else:
-                mel.eval('FBXExport -f "%s" -s' % outputName.replace("\\", "\\\\"))
+                # Configure Export
+                mel.eval('FBXResetExport;')
+                mel.eval('FBXExportGenerateLog -v false;')
+                mel.eval('FBXExportShapes -v true;')
+                mel.eval('FBXExportSkins -v true;')
+                mel.eval('FBXExportSkeletonDefinitions -v true;')
+                mel.eval('FBXExportBakeComplexAnimation -v true;')
+                #  Export FBX
+                mel.eval('file -force -options "v=0;" -typ "FBX export" -pr -es "%s";' % outputName.replace("\\", "\\\\"))
         elif expType == ".abc":
             try:
                 rootString = ""
