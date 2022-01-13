@@ -1,5 +1,8 @@
 v1.3.0.85:
 - Make sure we always has nframes in PrismBrowser player
+- added support for Blender 3.0+ (requires updated dependencies from installer)
+- the Shotgun password and API key are hidden now in the UI
+- Linux default paths for Blender and Houdini
 
 v1.3.0.84:
 - Add path to steps and cats callback-function
