@@ -183,7 +183,7 @@ class PrismCore:
 
         try:
             # set some general variables
-            self.version = "v1.3.0.84"
+            self.version = "v1.3.0.85"
             self.requiredLibraries = "v1.3.0.0"
             self.core = self
 
@@ -1905,10 +1905,8 @@ License: GNU GPL-3.0-or-later<br>
     @err_catcher(name=__name__)
     def copyfile(self, src, dst, thread=None, follow_symlinks=True):
         """Copy data from src to dst.
-
         If follow_symlinks is not set and src is a symbolic link, a new
         symlink will be created instead of copying the file it points to.
-
         """
         if shutil._samefile(src, dst):
             raise shutil.SameFileError("{!r} and {!r} are the same file".format(src, dst))
@@ -2582,7 +2580,6 @@ License: GNU GPL-3.0-or-later<br>
     class waitPopup(QObject):
         """
         with self.core.waitPopup(self.core, text):
-
         """
         canceled = Signal()
 
@@ -2700,13 +2697,9 @@ License: GNU GPL-3.0-or-later<br>
                 lastLine = [x for x in text.split("\n") if x and x != "\n"][-1]
                 if lastLine.startswith("TypeError"):
                     ptext = """An unknown Prism error occured in this plugin:
-
 %s
-
 This error happened while calling this function:
-
 %s
-
 If this plugin was created by yourself, please make sure you update your plugin to support the currently installed Prism version.
 If this plugin is an official Prism plugin, please submit this error to the developer.
 """ % (self.callbacks.currentCallback["plugin"], self.callbacks.currentCallback["function"])
