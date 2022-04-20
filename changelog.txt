@@ -1,3 +1,6 @@
+v1.3.0.86:
+- Add subfolders in Task name
+
 v1.3.0.85:
 - Make sure we always has nframes in PrismBrowser player
 - added support for Blender 3.0+ (requires updated dependencies from installer)
