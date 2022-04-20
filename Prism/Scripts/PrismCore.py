@@ -183,7 +183,7 @@ class PrismCore:
 
         try:
             # set some general variables
-            self.version = "v1.3.0.85"
+            self.version = "v1.3.0.86"
             self.requiredLibraries = "v1.3.0.0"
             self.core = self
 
