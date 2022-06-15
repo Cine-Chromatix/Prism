@@ -626,6 +626,9 @@ class Prism_Maya_Functions(object):
     @err_catcher(name=__name__)
     def sm_export_setTaskText(self, origin, prevTaskName, newTaskName):
         prev = self.validate(prevTaskName) if prevTaskName else ""
+        if newTaskName[0].isdigit():
+            newTaskName = '_' + newTaskName
+
         if self.isNodeValid(origin, prev) and "objectSet" in cmds.nodeType(prev, inherited=True):
             setName = cmds.rename(prev, newTaskName)
         else:
