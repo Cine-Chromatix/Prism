@@ -786,7 +786,7 @@ class Prism_Houdini_Functions(object):
         pass
 
     @err_catcher(name=__name__)
-    def shotgunPublish_startup(self, origin):
+    def ftrackPublish_startup(self, origin):
         if self.core.uiAvailable:
             origin.te_description.setStyleSheet(
                 hou.qt.styleSheet().replace("QTextEdit", "QPlainTextEdit")
