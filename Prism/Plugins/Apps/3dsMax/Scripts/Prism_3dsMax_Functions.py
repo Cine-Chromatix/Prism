@@ -230,7 +230,7 @@ class Prism_3dsMax_Functions(object):
         pass
 
     @err_catcher(name=__name__)
-    def shotgunPublish_startup(self, origin):
+    def ftrackPublish_startup(self, origin):
         pass
 
     @err_catcher(name=__name__)

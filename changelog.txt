@@ -6,6 +6,7 @@ v1.3.0.88:
 v1.3.0.87:
 - fixed an error in Maya, when creating an Export state when the scenefile was saved in a category, which contained a number character as first letter
 - full PySide2 and shiboken2 Support
+- added support for Blender 3.1+
 
 v1.3.0.86:
 - Add subfolders in Task name
