@@ -254,7 +254,7 @@ class sgPublish(QDialog, ShotgunPublish_ui.Ui_dlg_sgPublish):
                 taskNames += os.listdir(i)
 
         taskNames = list(set(taskNames))
-        # 	taskNames = [x for x in taskNames if x not in sgTaskNames]
+        taskNames = [x for x in taskNames if x not in sgTaskNames]
 
         self.cb_task.addItems(sgTaskNames)
         if len(sgTaskNames) > 0 and len(taskNames) > 0:

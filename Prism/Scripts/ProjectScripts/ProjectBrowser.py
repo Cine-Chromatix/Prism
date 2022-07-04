@@ -1451,6 +1451,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             lw = self.lw_aCategory
             if self.curaStep is not None:
                 path = self.core.getEntityPath(asset=self.curAsset, step=self.curaStep)
+                path = self.core.fixPath(path)
             else:
                 return False
 
@@ -1480,6 +1481,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             lw = self.lw_sCategory
             if self.cursStep is not None:
                 path = self.core.getEntityPath(shot=self.cursShots, step=self.cursStep)
+                path = self.core.fixPath(path)
             else:
                 return False
 
@@ -1724,7 +1726,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         rcmenu.addAction(copAct)
 
         self.core.callback(
-            name="openPBFileContextMenu", types=["custom"], args=[self, rcmenu, idx]
+            name="openPBFileContextMenu", types=["custom"], args=[self, rcmenu, idx, filepath]
         )
 
         rcmenu.exec_((tw.viewport()).mapToGlobal(pos))
