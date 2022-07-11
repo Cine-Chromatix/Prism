@@ -159,7 +159,7 @@ class Prism_PluginEmpty_Functions(object):
         pass
 
     @err_catcher(name=__name__)
-    def openPBFileContextMenu(self, origin, rcmenu, index):
+    def openPBFileContextMenu(self, origin, rcmenu, index, filepath):
         # gets called before "rcmenu" get displayed. Can be used to modify the context menu when the user right clicks in the scenefile lists of assets or shots in the Project Browser.
         pass
 
