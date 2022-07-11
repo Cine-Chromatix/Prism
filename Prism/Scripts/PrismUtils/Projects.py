@@ -595,6 +595,7 @@ class Projects(object):
         cfolders = [
             os.path.join(prjPath, scname, "Assets"),
             os.path.join(prjPath, scname, "Shots"),
+            os.path.join(prjPath, scname, "Textures"),
             os.path.join(prjPath, assetname, "Textures"),
             os.path.join(prjPath, assetname, "HDAs"),
         ]

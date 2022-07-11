@@ -2,6 +2,8 @@ v1.3.0.88:
 - fixed Path bug in Project Browser
 - added filepath to the File context menu callback
 - added DaVinciResolve Plugin (experimental)
+- create Texturesfolder inside WorkflowFolder on Project creation
+- moved the cx-plugin to root location
 
 v1.3.0.87:
 - fixed an error in Maya, when creating an Export state when the scenefile was saved in a category, which contained a number character as first letter
