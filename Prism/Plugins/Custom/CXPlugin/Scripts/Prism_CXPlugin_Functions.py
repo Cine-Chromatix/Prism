@@ -73,8 +73,8 @@ class Prism_CXPlugin_Functions(object):
     @err_catcher(name=__name__)
     def onProjectChanged(self, origin):
         ftrack = self.core.getConfig('ftrack', 'active', configPath=self.core.prismIni)
-        
-        if ftrack == None:
+
+        if ftrack is None:
             active = True
             site = 'https://cine-chromatix.ftrackapp.com'
             projectname = ''
@@ -86,7 +86,6 @@ class Prism_CXPlugin_Functions(object):
             self.core.setConfig('ftrack', 'projectname', projectname, configPath=self.core.prismIni)
             self.core.setConfig('ftrack', 'username', username, configPath=self.core.prismIni)
             self.core.setConfig('ftrack', 'apikey', apikey, configPath=self.core.prismIni)
-
 
     @err_catcher(name=__name__)
     def onSetProjectStartup(self, origin):
@@ -593,11 +592,10 @@ class Prism_CXPlugin_Functions(object):
 
         ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
         schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
+        ftrackTasks = session.query('Task where project.name is "{0}" and (parent.object_type.name is "{1}" or parent.parent.object_type.name is "{1}") and assignments any (resource.username = "{2}")'.format(ftrackProjectName, entity, ftrackUsername))
+        ftrackDict = defaultdict(list)
 
         if schema == 'CXL-Schema':
-            ftrackTasks = session.query('Task where project.name is "{0}" and (parent.object_type.name is "{1}" or parent.parent.object_type.name is "{1}") and assignments any (resource.username = "{2}")'.format(ftrackProjectName, entity, ftrackUsername))
-            ftrackDict = defaultdict(list)
-
             for i in ftrackTasks:
                 if i['parent']['object_type']['name'] == entity:
                     ftrackDict[i['parent']].append(i)
@@ -605,9 +603,6 @@ class Prism_CXPlugin_Functions(object):
                     ftrackDict[i['parent']['parent']].append(i)
 
         if schema == 'CXB-Schema':
-            ftrackTasks = session.query('Task where project.name is "{0}" and (parent.object_type.name is "{1}" or parent.parent.object_type.name is "{1}") and assignments any (resource.username = "{2}")'.format(ftrackProjectName, entity, ftrackUsername))
-            ftrackDict = defaultdict(list)
-
             for i in ftrackTasks:
                 if i['parent']['object_type']['name'] == entity:
                     ftrackDict[i['parent']].append(i)
