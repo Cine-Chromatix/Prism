@@ -1,3 +1,6 @@
+v1.3.0.89:
+- Tasks implementation inside Prism Browser
+
 v1.3.0.88:
 - fixed Path bug in Project Browser
 - added filepath to the File context menu callback
