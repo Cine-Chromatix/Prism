@@ -121,19 +121,14 @@ class MediaManager(object):
             ffmpegPath = os.path.join(
                 self.core.prismLibs, "Tools", "FFmpeg", "bin", "ffmpeg.exe"
             )
-            if os.path.exists(ffmpegPath):
-                ffmpegIsInstalled = True
         elif platform.system() == "Linux":
             ffmpegPath = "ffmpeg"
             try:
                 subprocess.Popen([ffmpegPath])
-                ffmpegIsInstalled = True
             except Exception:
                 pass
         elif platform.system() == "Darwin":
             ffmpegPath = os.path.join(self.core.prismLibs, "Tools", "ffmpeg")
-            if os.path.exists(ffmpegPath):
-                ffmpegIsInstalled = True
         return ffmpegPath
 
     @err_catcher(name=__name__)
