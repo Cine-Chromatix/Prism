@@ -59,6 +59,7 @@ try:
     from PySide2.QtCore import *
     from PySide2.QtGui import *
     from PySide2.QtWidgets import *
+    
     psVersion = 2
 except:
     from PySide.QtCore import *
@@ -297,8 +298,8 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         self.tw_recent.mouseClickEvent = self.tw_recent.mouseReleaseEvent
         self.tw_recent.mouseReleaseEvent = lambda x: self.mouseClickEvent(x, "r")
 
-        self.tw_tasks.mouseClickEvent = self.tw_tasks.mouseReleaseEvent
-        self.tw_tasks.mouseReleaseEvent = lambda x: self.mouseClickEvent(x, "t")
+        # self.tw_tasks.mouseClickEvent = self.tw_tasks.mouseReleaseEvent
+        # self.tw_tasks.mouseReleaseEvent = lambda x: self.mouseClickEvent(x, "t")
 
         self.tw_aHierarchy.currentItemChanged.connect(lambda x, y: self.Assetclicked(x))
         self.tw_aHierarchy.itemExpanded.connect(self.hItemExpanded)
@@ -390,14 +391,14 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         self.tw_recent.leaveEvent = lambda x: self.tableLeaveEvent(x, "r")
         self.tw_recent.focusOutEvent = lambda x: self.tableFocusOutEvent(x, "r")
 
-        self.tw_tasks.customContextMenuRequested.connect(
-            lambda x: self.rclFile("t", x)
-        )
-        self.tw_tasks.doubleClicked.connect(self.sceneDoubleClicked)
-        self.tw_tasks.setMouseTracking(True)
-        self.tw_tasks.mouseMoveEvent = lambda x: self.tableMoveEvent(x, "t")
-        self.tw_tasks.leaveEvent = lambda x: self.tableLeaveEvent(x, "t")
-        self.tw_tasks.focusOutEvent = lambda x: self.tableFocusOutEvent(x, "t")
+        # self.tw_tasks.customContextMenuRequested.connect(
+        #     lambda x: self.rclFile("t", x)
+        # )
+        # self.tw_tasks.doubleClicked.connect(self.sceneDoubleClicked)
+        # self.tw_tasks.setMouseTracking(True)
+        # self.tw_tasks.mouseMoveEvent = lambda x: self.tableMoveEvent(x, "t")
+        # self.tw_tasks.leaveEvent = lambda x: self.tableLeaveEvent(x, "t")
+        # self.tw_tasks.focusOutEvent = lambda x: self.tableFocusOutEvent(x, "t")
 
         for i in self.appFilters:
             self.appFilters[i]["assetChb"].stateChanged.connect(self.refreshAFile)
@@ -3259,7 +3260,9 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
 
     @err_catcher(name=__name__)
     def setTasks(self):
-        pass
+        url = self.core.getConfig('ftrack', 'site', configPath=self.core.prismIni)
+        self.tw_tasks.setUrl(QUrl(url))
+
 
     @err_catcher(name=__name__)
     def refreshCurrent(self):
@@ -3345,21 +3348,6 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 self.tbw_browser.setVisible(True)
         else:
             self.tbw_browser.removeTab(self.tbw_browser.indexOf(self.t_recent))
-            if self.tbw_browser.count() == 0:
-                self.tbw_browser.setVisible(False)
-
-    @err_catcher(name=__name__)
-    def triggerTasks(self, checked=False):
-        if checked:
-            self.tbw_browser.insertTab(
-                self.tabOrder["Tasks"]["order"],
-                self.t_tasks,
-                self.tabLabels["Tasks"],
-            )
-            if self.tbw_browser.count() == 1:
-                self.tbw_browser.setVisible(True)
-        else:
-            self.tbw_browser.removeTab(self.tbw_browser.indexOf(self.t_tasks))
             if self.tbw_browser.count() == 0:
                 self.tbw_browser.setVisible(False)
 

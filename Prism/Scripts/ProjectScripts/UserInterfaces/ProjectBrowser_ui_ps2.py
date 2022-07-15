@@ -8,7 +8,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 
 class Ui_mw_ProjectBrowser(object):
     def setupUi(self, mw_ProjectBrowser):
@@ -426,23 +426,9 @@ class Ui_mw_ProjectBrowser(object):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.t_tasks)
         self.horizontalLayout_4.setContentsMargins(15, 15, 15, 15)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.tw_tasks = QtWidgets.QTableView(self.t_tasks)
+        self.tw_tasks = QtWebEngineWidgets.QWebEngineView(self.t_tasks)
         self.tw_tasks.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.tw_tasks.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.tw_tasks.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.tw_tasks.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        self.tw_tasks.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.tw_tasks.setTextElideMode(QtCore.Qt.ElideNone)
-        self.tw_tasks.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
-        self.tw_tasks.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
-        self.tw_tasks.setSortingEnabled(False)
         self.tw_tasks.setObjectName("tw_tasks")
-        self.tw_tasks.horizontalHeader().setCascadingSectionResizes(False)
-        self.tw_tasks.horizontalHeader().setHighlightSections(False)
-        self.tw_tasks.horizontalHeader().setSortIndicatorShown(False)
-        self.tw_tasks.horizontalHeader().setStretchLastSection(True)
-        self.tw_tasks.verticalHeader().setVisible(False)
-        self.tw_tasks.verticalHeader().setStretchLastSection(False)
         self.horizontalLayout_4.addWidget(self.tw_tasks)
         self.tbw_browser.addTab(self.t_tasks, "")
 
