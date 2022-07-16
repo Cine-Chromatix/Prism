@@ -1,5 +1,6 @@
 v1.3.0.89:
 - Tasks implementation inside Prism Browser
+- moved the Ftrack-plugin to root location
 
 v1.3.0.88:
 - fixed Path bug in Project Browser
