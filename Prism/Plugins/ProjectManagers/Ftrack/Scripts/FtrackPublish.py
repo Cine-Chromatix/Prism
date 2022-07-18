@@ -363,8 +363,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                     erStr = "ERROR:\n%s" % traceback.format_exc()
                     QMessageBox.warning(self.core.messageParent, "Ftrack Publish", erStr)
                     return
-            QMessageBox.warning(self.core.messageParent, "asset parent", asset['parent']['parent']['name'] + '-' + asset['parent']['name'])
-            QMessageBox.warning(self.core.messageParent, "curTask parent", curTask['parent']['parent']['name'])
+
             data = {}
             data = {
                 'comment': self.te_description.toPlainText(),
