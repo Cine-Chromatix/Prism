@@ -57,15 +57,14 @@ modulePath = os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file
 sys.path.append(modulePath)
 
 
-path = r'C:/Prism/Plugins/Custom/CXPlugin/Scripts'
-sys.path.append(path)
-import Prism_CXPlugin_Functions
-
-
 class Prism_Ftrack_Functions(object):
     def __init__(self, core, plugin):
         self.core = core
         self.plugin = plugin
+
+        path = os.path.join(self.core.pluginPathCustom, 'CXPlugin', 'Scripts')
+        sys.path.append(path)
+        import Prism_CXPlugin_Functions
 
         self.callbacks = []
         self.registerCallbacks()
@@ -894,7 +893,7 @@ class Prism_Ftrack_Functions(object):
                 self.setLayout(vb)
 
         ww = WebWindow(ftrackSite)
-        # self.core.parentWindow(ww)
+        self.core.parentWindow(ww)
         ww.exec_()
 
     # Muss Überarbeitet werden dass die Struktur Projektspeziefich bleibt
