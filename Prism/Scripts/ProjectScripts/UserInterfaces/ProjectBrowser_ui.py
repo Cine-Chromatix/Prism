@@ -54,7 +54,7 @@ class Ui_mw_ProjectBrowser(object):
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.l_aHierarchy = QtGui.QLabel(self.widget_3)
-        self.l_aHierarchy.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.l_aHierarchy.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.l_aHierarchy.setObjectName("l_aHierarchy")
         self.horizontalLayout_2.addWidget(self.l_aHierarchy)
         self.b_assetSearch = QtGui.QToolButton(self.widget_3)
@@ -83,7 +83,9 @@ class Ui_mw_ProjectBrowser(object):
         self.verticalLayout_3.addWidget(self.tw_aHierarchy)
         self.horizontalLayout_3.addWidget(self.w_assetHierarchy)
         self.verticalWidget_3 = QtGui.QWidget(self.t_assets)
-        self.verticalWidget_3.setMaximumSize(QtCore.QSize(272, 16777215))
+
+        self.verticalWidget_3.setMaximumSize(QtCore.QSize(572, 16777215))
+
         self.verticalWidget_3.setObjectName("verticalWidget_3")
         self.verticalLayout_21 = QtGui.QVBoxLayout(self.verticalWidget_3)
         self.verticalLayout_21.setSpacing(10)
@@ -96,7 +98,10 @@ class Ui_mw_ProjectBrowser(object):
         self.horizontalLayout_13.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.widget_23 = QtGui.QWidget(self.horizontalWidget_2)
-        self.widget_23.setMinimumSize(QtCore.QSize(80, 0))
+
+        self.widget_23.setMinimumSize(QtCore.QSize(90, 0))
+        self.widget_23.setMaximumSize(QtCore.QSize(90, 16777215))
+
         self.widget_23.setObjectName("widget_23")
         self.verticalLayout_22 = QtGui.QVBoxLayout(self.widget_23)
         self.verticalLayout_22.setContentsMargins(0, 0, 0, 0)
@@ -112,8 +117,10 @@ class Ui_mw_ProjectBrowser(object):
         self.verticalLayout_22.addWidget(self.lw_aPipeline)
         self.horizontalLayout_13.addWidget(self.widget_23)
         self.w_aCategory = QtGui.QWidget(self.horizontalWidget_2)
-        self.w_aCategory.setMinimumSize(QtCore.QSize(182, 0))
-        self.w_aCategory.setMaximumSize(QtCore.QSize(182, 16777215))
+
+        # self.w_aCategory.setMinimumSize(QtCore.QSize(182, 0))
+        # self.w_aCategory.setMaximumSize(QtCore.QSize(182, 16777215))
+
         self.w_aCategory.setObjectName("w_aCategory")
         self.verticalLayout_23 = QtGui.QVBoxLayout(self.w_aCategory)
         self.verticalLayout_23.setContentsMargins(0, 0, 0, 0)
@@ -231,7 +238,7 @@ class Ui_mw_ProjectBrowser(object):
         self.horizontalLayout_15.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_15.setObjectName("horizontalLayout_15")
         self.l_sShot = QtGui.QLabel(self.widget_9)
-        self.l_sShot.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.l_sShot.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.l_sShot.setObjectName("l_sShot")
         self.horizontalLayout_15.addWidget(self.l_sShot)
         self.b_shotSearch = QtGui.QToolButton(self.widget_9)
@@ -261,7 +268,9 @@ class Ui_mw_ProjectBrowser(object):
         self.verticalLayout_18.addWidget(self.tw_sShot)
         self.horizontalLayout_7.addWidget(self.w_shots)
         self.verticalWidget_2 = QtGui.QWidget(self.t_shots)
-        self.verticalWidget_2.setMaximumSize(QtCore.QSize(272, 16777215))
+
+        self.verticalWidget_2.setMaximumSize(QtCore.QSize(572, 16777215))
+
         self.verticalWidget_2.setObjectName("verticalWidget_2")
         self.verticalLayout_17 = QtGui.QVBoxLayout(self.verticalWidget_2)
         self.verticalLayout_17.setSpacing(10)
@@ -274,8 +283,10 @@ class Ui_mw_ProjectBrowser(object):
         self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
         self.widget_22 = QtGui.QWidget(self.horizontalWidget)
-        self.widget_22.setMinimumSize(QtCore.QSize(80, 0))
-        self.widget_22.setMaximumSize(QtCore.QSize(80, 16777215))
+
+        self.widget_22.setMinimumSize(QtCore.QSize(90, 0))
+        self.widget_22.setMaximumSize(QtCore.QSize(90, 16777215))
+
         self.widget_22.setObjectName("widget_22")
         self.verticalLayout_16 = QtGui.QVBoxLayout(self.widget_22)
         self.verticalLayout_16.setContentsMargins(0, 0, 0, 0)
@@ -795,7 +806,7 @@ class Ui_mw_ProjectBrowser(object):
         self.actionRecent.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "Recent", None, QtGui.QApplication.UnicodeUTF8))
 
         self.actionTasks.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "Tasks", None, QtGui.QApplication.UnicodeUTF8))
-        
+
         self.actionOpenOnStart.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "Open on startup", None, QtGui.QApplication.UnicodeUTF8))
         self.actionRenderWatch.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "RenderWatch", None, QtGui.QApplication.UnicodeUTF8))
         self.actionStateManager.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "State Manager...", None, QtGui.QApplication.UnicodeUTF8))
@@ -805,4 +816,3 @@ class Ui_mw_ProjectBrowser(object):
         self.actionTest.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "test", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCheckForUpdates.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "Check for latest import version", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCheckForShotFrameRange.setText(QtGui.QApplication.translate("mw_ProjectBrowser", "Check for shot frame range", None, QtGui.QApplication.UnicodeUTF8))
-
