@@ -62,10 +62,6 @@ class Prism_Ftrack_Functions(object):
         self.core = core
         self.plugin = plugin
 
-        path = os.path.join(self.core.pluginPathCustom, 'CXPlugin', 'Scripts')
-        sys.path.append(path)
-        import Prism_CXPlugin_Functions
-
         self.callbacks = []
         self.registerCallbacks()
 
@@ -900,6 +896,10 @@ class Prism_Ftrack_Functions(object):
     @err_catcher(name=__name__)
     def FtrackAssetsToLocal(self, origin):
         # add code here
+        path = os.path.join(self.core.pluginPathCustom, 'CXPlugin', 'Scripts')
+        sys.path.append(path)
+        from Prism_CXPlugin_Functions import Prism_CXPlugin_Functions
+
         session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
 
         if ftrackProjectName is None:
@@ -910,7 +910,7 @@ class Prism_Ftrack_Functions(object):
         if session is None:
             return
 
-        ftrackTasks, ftrackDict = Prism_CXPlugin_Functions.Prism_CXPlugin_Functions.getFtrackEntityData(self, 'Asset Build')
+        ftrackTasks, ftrackDict = Prism_CXPlugin_Functions.getFtrackEntityData(self, 'Asset Build')
 
         createdAssets = []
         for i in ftrackDict:
@@ -1109,6 +1109,10 @@ class Prism_Ftrack_Functions(object):
     @err_catcher(name=__name__)
     def FtrackShotsToLocal(self, origin):
         # add code here
+        path = os.path.join(self.core.pluginPathCustom, 'CXPlugin', 'Scripts')
+        sys.path.append(path)
+        from Prism_CXPlugin_Functions import Prism_CXPlugin_Functions
+
         session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
 
         if ftrackProjectName is None:
@@ -1119,7 +1123,7 @@ class Prism_Ftrack_Functions(object):
         if session is None:
             return
 
-        ftrackTasks, ftrackDict = Prism_CXPlugin_Functions.Prism_CXPlugin_Functions.getFtrackEntityData(self, 'Shot')
+        ftrackTasks, ftrackDict = Prism_CXPlugin_Functions.getFtrackEntityData(self, 'Shot')
 
         ftrackShots = {}
         createdShots = []
@@ -1459,6 +1463,10 @@ class Prism_Ftrack_Functions(object):
 
     @err_catcher(name=__name__)
     def createftrackProject(self):
+        path = os.path.join(self.core.pluginPathCustom, 'CXPlugin', 'Scripts')
+        sys.path.append(path)
+        from Prism_CXPlugin_Functions import Prism_CXPlugin_Functions
+
         self.session, self.ftrackProjectName, self.ftrackUserId = self.connectToFtrack(user=True)
 
         class Window(QDialog):
@@ -1502,7 +1510,7 @@ class Prism_Ftrack_Functions(object):
 
         if self.ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
-            projectSchema, folderStructure = Prism_CXPlugin_Functions.Prism_CXPlugin_Functions.getStudioData(self, loc)
+            projectSchema, folderStructure = Prism_CXPlugin_Functions.getStudioData(self, loc)
             ftrackProjectFullName = self.core.getConfig('globals', 'project_name', configPath=self.core.prismIni)
 
             # Naively pick the first project schema. For this example to work the
