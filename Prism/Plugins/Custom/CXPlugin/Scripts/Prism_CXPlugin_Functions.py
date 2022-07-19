@@ -59,7 +59,7 @@ class Prism_CXPlugin_Functions(object):
         self.core = core
         self.plugin = plugin
 
-        path = os.path.join(self.core.pluginPathCustom, 'Prism-FtrackPlugin', 'Scripts')
+        path = os.path.join(self.core.pluginPathPrjMng, 'Ftrack', 'Scripts')
         sys.path.append(path)
         from Prism_Ftrack_Functions import Prism_Ftrack_Functions
 

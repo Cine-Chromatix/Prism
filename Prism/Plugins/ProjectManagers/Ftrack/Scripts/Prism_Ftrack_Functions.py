@@ -1441,7 +1441,7 @@ class Prism_Ftrack_Functions(object):
 
         checklist = ['Not started', 'Awaiting Approval CX', 'Retakes']
         ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
-        task = session.query('Task where project.name is "{0}" and name is "{1}" and assignments any (resource.username = "{3}") and (parent.name is "{2}" or parent.parent.name is "{2}")'.format(ftrackProjectName, taskName, assetName, ftrackUsername)).first()
+        task = session.query('Task where project.name is "{0}" and name is "{1}" and assignments any (resource.username = "{4}") and (parent.name is "{2}" or parent.parent.name is "{3}") or (parent.parent.name is "{2}" or parent.parent.parent.name is "{3}")'.format(ftrackProjectName, taskName, assetName, seqName, ftrackUsername)).first()
 
         if task is None:
             # add option to proceed or cancel
@@ -1541,3 +1541,25 @@ class Prism_Ftrack_Functions(object):
             QMessageBox.information(self.core.messageParent, 'Ftrack', 'Project creation is completed.')
         else:
             QMessageBox.warning(self.core.messageParent, 'Ftrack', 'The Project already exist in Ftrack!')
+
+    @err_catcher(name=__name__)
+    def getFtrackStatus(self, taskname, entityname):
+        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=True)
+
+        if ftrackProjectName is None:
+            ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
+            QMessageBox.warning(self.core.messageParent, 'Ftrack', 'Could not find project "%s" in Ftrack.' % ftrackProjectName,)
+            return
+
+        ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
+        taskName = 'taskname'
+        assetName, seqName = self.core.entities.splitShotname(entityname)
+
+        task = session.query('Task where project.name is "{0}" and name is "{1}" and assignments any (resource.username = "{4}") and (parent.name is "{2}" or parent.parent.name is "{3}") or (parent.parent.name is "{2}" or parent.parent.parent.name is "{3}")'.format(ftrackProjectName, taskName, assetName, seqName, ftrackUsername)).first()
+
+        if task['status']['name'] == 'Retake':
+            colorVals = [235, 54, 26]  # retake
+        else:
+            colorVals = [239, 240, 241]  # standart
+
+        return colorVals
