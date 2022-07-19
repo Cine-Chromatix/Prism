@@ -580,8 +580,7 @@ class Prism_CXPlugin_Functions(object):
 
     @err_catcher(name=__name__)
     def getFtrackEntityData(self, entity):
-
-        path = r'D:\dev\GitHub\Prism-FtrackPlugin\Scripts'
+        path = os.path.join(self.core.pluginPathPrjMng, 'Ftrack', 'Scripts')
         sys.path.append(path)
         from Prism_Ftrack_Functions import Prism_Ftrack_Functions
         from collections import defaultdict

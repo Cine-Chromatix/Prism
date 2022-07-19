@@ -59,6 +59,7 @@ try:
     from PySide2.QtCore import *
     from PySide2.QtGui import *
     from PySide2.QtWidgets import *
+    
     psVersion = 2
 except:
     from PySide.QtCore import *
@@ -154,6 +155,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             "Assets": "Assets",
             "Shots": "Shots",
             "Recent": "Recent",
+            "Tasks": "Tasks",
         }
         self.tableColumnLabels = {
             "Version": "Version",
@@ -218,6 +220,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         self.core.entities.refreshOmittedEntities()
         self.loadLayout()
         self.setRecent()
+        self.setTasks()
         self.getRVpath()
         self.getDJVpath()
         self.getVLCpath()
@@ -232,7 +235,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         self.updateTasks()
 
         self.l_preview.setAcceptDrops(True)
-    #   self.tw_sFiles.setStyleSheet("QTableView,QListView,QHeaderView {color: rgb(199,199,199);background-color: rgb(71,71,71);selection-color: rgb(0,0,0);selection-background-color: rgb(242,138,0);}")
+        # self.tw_sFiles.setStyleSheet("QTableView,QListView,QHeaderView {color: rgb(199,199,199);background-color: rgb(71,71,71);selection-color: rgb(0,0,0);selection-background-color: rgb(242,138,0);}")
 
     @err_catcher(name=__name__)
     def connectEvents(self):
@@ -294,6 +297,9 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
 
         self.tw_recent.mouseClickEvent = self.tw_recent.mouseReleaseEvent
         self.tw_recent.mouseReleaseEvent = lambda x: self.mouseClickEvent(x, "r")
+
+        # self.tw_tasks.mouseClickEvent = self.tw_tasks.mouseReleaseEvent
+        # self.tw_tasks.mouseReleaseEvent = lambda x: self.mouseClickEvent(x, "t")
 
         self.tw_aHierarchy.currentItemChanged.connect(lambda x, y: self.Assetclicked(x))
         self.tw_aHierarchy.itemExpanded.connect(self.hItemExpanded)
@@ -373,6 +379,7 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         self.actionAssets.toggled.connect(self.triggerAssets)
         self.actionShots.toggled.connect(self.triggerShots)
         self.actionRecent.toggled.connect(self.triggerRecent)
+        self.actionTasks.toggled.connect(self.triggerTasks)
         self.actionRenderings.toggled.connect(self.triggerRenderings)
         self.tbw_browser.currentChanged.connect(self.tabChanged)
         self.tw_recent.customContextMenuRequested.connect(
@@ -383,6 +390,15 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         self.tw_recent.mouseMoveEvent = lambda x: self.tableMoveEvent(x, "r")
         self.tw_recent.leaveEvent = lambda x: self.tableLeaveEvent(x, "r")
         self.tw_recent.focusOutEvent = lambda x: self.tableFocusOutEvent(x, "r")
+
+        # self.tw_tasks.customContextMenuRequested.connect(
+        #     lambda x: self.rclFile("t", x)
+        # )
+        # self.tw_tasks.doubleClicked.connect(self.sceneDoubleClicked)
+        # self.tw_tasks.setMouseTracking(True)
+        # self.tw_tasks.mouseMoveEvent = lambda x: self.tableMoveEvent(x, "t")
+        # self.tw_tasks.leaveEvent = lambda x: self.tableLeaveEvent(x, "t")
+        # self.tw_tasks.focusOutEvent = lambda x: self.tableFocusOutEvent(x, "t")
 
         for i in self.appFilters:
             self.appFilters[i]["assetChb"].stateChanged.connect(self.refreshAFile)
@@ -586,20 +602,23 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             "Assets": {"order": 0, "showRenderings": True},
             "Shots": {"order": 1, "showRenderings": True},
             "Recent": {"order": 2, "showRenderings": False},
+            "Tasks": {"order": 3, "showRenderings": False},
         }
         if (
             "assetsOrder" in brsData
             and "shotsOrder" in brsData
             and "filesOrder" in brsData
             and "recentOrder" in brsData
+            and "tasksOrder" in brsData
         ):
-            for i in ["assetsOrder", "shotsOrder", "filesOrder", "recentOrder"]:
+            for i in ["assetsOrder", "shotsOrder", "filesOrder", "recentOrder", "tasksOrder"]:
                 if brsData[i] >= len(self.tabOrder):
                     brsData[i] = -1
 
             self.tabOrder["Assets"]["order"] = brsData["assetsOrder"]
             self.tabOrder["Shots"]["order"] = brsData["shotsOrder"]
             self.tabOrder["Recent"]["order"] = brsData["recentOrder"]
+            self.tabOrder["Tasks"]["order"] = brsData["tasksOrder"]
 
         self.tbw_browser.insertTab(
             self.tabOrder["Assets"]["order"], self.t_assets, self.tabLabels["Assets"]
@@ -610,10 +629,14 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         self.tbw_browser.insertTab(
             self.tabOrder["Recent"]["order"], self.t_recent, self.tabLabels["Recent"]
         )
+        self.tbw_browser.insertTab(
+            self.tabOrder["Tasks"]["order"], self.t_tasks, self.tabLabels["Tasks"]
+        )
 
         self.t_assets.setProperty("tabType", "Assets")
         self.t_shots.setProperty("tabType", "Shots")
         self.t_recent.setProperty("tabType", "Recent")
+        self.t_tasks.setProperty("tabType", "Tasks")
 
         if brsData.get("assetsVisible", True) is False:
             self.tbw_browser.removeTab(self.tbw_browser.indexOf(self.t_assets))
@@ -626,6 +649,10 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         if brsData.get("recentVisible", True) is False:
             self.tbw_browser.removeTab(self.tbw_browser.indexOf(self.t_recent))
             self.actionRecent.setChecked(False)
+
+        if brsData.get("tasksVisible", True) is False:
+            self.tbw_browser.removeTab(self.tbw_browser.indexOf(self.t_tasks))
+            self.actionTasks.setChecked(False)
 
         if brsData.get("renderVisible", True) is False:
             self.actionRenderings.setChecked(False)
@@ -753,6 +780,9 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
         if "Recent" not in tabOrder:
             tabOrder.append("Recent")
 
+        if "Tasks" not in tabOrder:
+            tabOrder.append("Tasks")
+
         visible = []
         for i in range(self.tbw_browser.count()):
             visible.append(self.tbw_browser.widget(i).property("tabType"))
@@ -771,9 +801,11 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 "assetsOrder": tabOrder.index("Assets"),
                 "shotsOrder": tabOrder.index("Shots"),
                 "recentOrder": tabOrder.index("Recent"),
+                "tasksOrder": tabOrder.index("Tasks"),
                 "assetsVisible": "Assets" in visible,
                 "shotsVisible": "Shots" in visible,
                 "recentVisible": "Recent" in visible,
+                "tasksVisible": "Tasks" in visible,
                 "renderVisible": self.actionRenderings.isChecked(),
                 "assetSorting": [
                     self.tw_aFiles.horizontalHeader().sortIndicatorSection(),
@@ -865,6 +897,8 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 self.refreshSFile()
             elif tabType == "Recent":
                 self.setRecent()
+            elif tabType == "Tasks":
+                self.setTasks()
 
             if self.actionRenderings.isChecked():
                 self.gb_renderings.setVisible(self.tabOrder[tabType]["showRenderings"])
@@ -938,6 +972,9 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             self.refreshShots()
         elif curTab == "Recent":
             self.setRecent()
+
+        elif curTab == "Tasks":
+            self.setTasks()
 
         self.core.callback(name="onProjectBrowserRefreshUI", args=[self])
         self.setEnabled(True)
@@ -1057,32 +1094,39 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                         self.tw_sShot.mouseClickEvent(event)
                     elif uielement == "sp":
                         index = self.lw_sPipeline.indexAt(event.pos())
-                        if index.data() == None:
+                        if index.data() is None:
                             self.lw_sPipeline.setCurrentIndex(
                                 self.lw_sPipeline.model().createIndex(-1, 0)
                             )
                         self.lw_sPipeline.mouseClickEvent(event)
                     elif uielement == "sc":
                         index = self.lw_sCategory.indexAt(event.pos())
-                        if index.data() == None:
+                        if index.data() is None:
                             self.lw_sCategory.setCurrentIndex(
                                 self.lw_sCategory.model().createIndex(-1, 0)
                             )
                         self.lw_sCategory.mouseClickEvent(event)
                     elif uielement == "sf":
                         index = self.tw_sFiles.indexAt(event.pos())
-                        if index.data() == None:
+                        if index.data() is None:
                             self.tw_sFiles.setCurrentIndex(
                                 self.tw_sFiles.model().createIndex(-1, 0)
                             )
                         self.tw_sFiles.mouseClickEvent(event)
                     elif uielement == "r":
                         index = self.tw_recent.indexAt(event.pos())
-                        if index.data() == None:
+                        if index.data() is None:
                             self.tw_recent.setCurrentIndex(
                                 self.tw_recent.model().createIndex(-1, 0)
                             )
                         self.tw_recent.mouseClickEvent(event)
+                    elif uielement == "t":
+                        index = self.tw_tasks.indexAt(event.pos())
+                        if index.data() is None:
+                            self.tw_tasks.setCurrentIndex(
+                                self.tw_tasks.model().createIndex(-1, 0)
+                            )
+                        self.tw_tasks.mouseClickEvent(event)
             elif event.type() == QEvent.MouseButtonPress:
                 if uielement == "ah":
                     self.adclick = True
@@ -1158,6 +1202,8 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             table = self.tw_sFiles
         elif table == "r":
             table = self.tw_recent
+        elif table == "t":
+            table = self.tw_tasks
 
         index = table.indexAt(event.pos())
         if index.data() is None:
@@ -1614,6 +1660,8 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             tabName = "shot"
         elif tab == "r":
             tw = self.tw_recent
+        elif tab == "t":
+            tw = self.tw_tasks
 
         rcmenu = QMenu(self)
 
@@ -1748,6 +1796,8 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             refresh = self.refreshSFile
         elif self.tbw_browser.currentWidget().property("tabType") == "Recent":
             refresh = self.setRecent
+        elif self.tbw_browser.currentWidget().property("tabType") == "Tasks":
+            refresh = self.setTasks
 
         if self.core.useLocalFiles and self.sceneBasePath in filepath:
             lfilepath = self.core.convertPath(filepath, "local")
@@ -3209,6 +3259,12 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             self.tw_recent.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
 
     @err_catcher(name=__name__)
+    def setTasks(self):
+        url = self.core.getConfig('ftrack', 'site', configPath=self.core.prismIni)
+        self.tw_tasks.setUrl(QUrl(url))
+
+
+    @err_catcher(name=__name__)
     def refreshCurrent(self):
         if self.tbw_browser.currentWidget().property("tabType") == "Assets":
             self.refreshAFile()
@@ -3216,6 +3272,8 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
             self.refreshSFile()
         elif self.tbw_browser.currentWidget().property("tabType") == "Recent":
             self.setRecent()
+        elif self.tbw_browser.currentWidget().property("tabType") == "Tasks":
+            self.setTasks()
 
     @err_catcher(name=__name__)
     def triggerOpen(self, checked=False):
@@ -3267,7 +3325,9 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
     def triggerShots(self, checked=False):
         if checked:
             self.tbw_browser.insertTab(
-                self.tabOrder["Shots"]["order"], self.t_shots, self.tabLabels["Shots"]
+                self.tabOrder["Shots"]["order"], 
+                self.t_shots,
+                self.tabLabels["Shots"]
             )
             if self.tbw_browser.count() == 1:
                 self.tbw_browser.setVisible(True)
@@ -3288,6 +3348,21 @@ class ProjectBrowser(QMainWindow, ProjectBrowser_ui.Ui_mw_ProjectBrowser):
                 self.tbw_browser.setVisible(True)
         else:
             self.tbw_browser.removeTab(self.tbw_browser.indexOf(self.t_recent))
+            if self.tbw_browser.count() == 0:
+                self.tbw_browser.setVisible(False)
+
+    @err_catcher(name=__name__)
+    def triggerTasks(self, checked=False):
+        if checked:
+            self.tbw_browser.insertTab(
+                self.tabOrder["Tasks"]["order"],
+                self.t_tasks,
+                self.tabLabels["Tasks"],
+            )
+            if self.tbw_browser.count() == 1:
+                self.tbw_browser.setVisible(True)
+        else:
+            self.tbw_browser.removeTab(self.tbw_browser.indexOf(self.t_tasks))
             if self.tbw_browser.count() == 0:
                 self.tbw_browser.setVisible(False)
 
