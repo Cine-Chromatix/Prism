@@ -59,10 +59,6 @@ class Prism_CXPlugin_Functions(object):
         self.core = core
         self.plugin = plugin
 
-        path = os.path.join(self.core.pluginPathPrjMng, 'Ftrack', 'Scripts')
-        sys.path.append(path)
-        from Prism_Ftrack_Functions import Prism_Ftrack_Functions
-
     # if returns true, the plugin will be loaded by Prism
     @err_catcher(name=__name__)
     def isActive(self):
@@ -584,6 +580,9 @@ class Prism_CXPlugin_Functions(object):
 
     @err_catcher(name=__name__)
     def getFtrackEntityData(self, entity):
+        path = os.path.join(self.core.pluginPathPrjMng, 'Ftrack', 'Scripts')
+        sys.path.append(path)
+        from Prism_Ftrack_Functions import Prism_Ftrack_Functions
         from collections import defaultdict
 
         session, ftrackProjectName, ftrackUserId = Prism_Ftrack_Functions.connectToFtrack(self, user=False)
