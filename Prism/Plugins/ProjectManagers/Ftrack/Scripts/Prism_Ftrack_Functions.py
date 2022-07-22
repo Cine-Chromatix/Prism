@@ -817,6 +817,7 @@ class Prism_Ftrack_Functions(object):
         ftrackSite = self.core.getConfig('ftrack', 'site', configPath=self.core.prismIni)
         ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
         user_security_roles = session.query('UserSecurityRole where user.username is "{0}"'.format(ftrackUsername)).all()
+        entity = None
 
         for i in user_security_roles:
             userRole = i['security_role']['type']
