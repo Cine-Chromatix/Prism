@@ -227,7 +227,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
 
         text = self.cb_shot.currentText()
         curShot = [x for x in self.ftrackDict if x['name'] == text.split(self.core.sequenceSeparator)[1]][0]
-        curTask = [x for x in self.ftrackTasks if x["name"] == self.cb_task.currentText()][0]
+        curTask = [x for x in self.ftrackTasks if x["name"] == self.cb_task.currentText() and x['parent']['parent']['name'] == text.split(self.core.sequenceSeparator)[0]][0]
 
         def frames_to_TC(frames):
             h = int(frames / 180000)
