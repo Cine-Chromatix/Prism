@@ -147,6 +147,10 @@ class Prism_Ftrack_Functions(object):
 
     @err_catcher(name=__name__)
     def onProjectChanged(self, origin):
+        if (hasattr(self, 'session') or hasattr(self, 'ftrackProjectName')):
+            del self.session
+            del self.ftrackProjectName
+
         if hasattr(self, "ftrack"):
             del self.ftrack
 
