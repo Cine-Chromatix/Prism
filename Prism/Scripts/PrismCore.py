@@ -92,26 +92,26 @@ try:
     from PySide2.QtCore import *
     from PySide2.QtGui import *
     from PySide2.QtWidgets import *
-except:
+except Exception:
     try:
         if "standalone" in sys.argv:
             raise
 
         from PySide.QtCore import *
         from PySide.QtGui import *
-    except:
+    except Exception:
         sys.path.insert(0, os.path.join(prismLibs, "PythonLibs", pyLibs, "PySide"))
         try:
             from PySide2.QtCore import *
             from PySide2.QtGui import *
             from PySide2.QtWidgets import *
-        except:
+        except Exception:
             from PySide.QtCore import *
             from PySide.QtGui import *
 
 try:
     import EnterText
-except:
+except Exception:
     modPath = imp.find_module("EnterText")[1]
     if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
         os.remove(modPath)
@@ -155,7 +155,7 @@ class asTimer(QObject):
             t = threading.Timer(autosaveMins * 60, self.stopThread)
             t.start()
 
-        except Exception as e:
+        except Exception:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             erStr = "ERROR - asTimer run:\n%s" % traceback.format_exc()
             logger.warning(erStr)
@@ -173,7 +173,7 @@ class TimeMeasure(object):
     def __exit__(self, type, value, traceback):
         endTime = datetime.now()
         logger.info("endtime: %s" % endTime.strftime('%Y-%m-%d %H:%M:%S'))
-        logger.info("duration: %s" % (endTime-self.startTime))
+        logger.info("duration: %s" % (endTime - self.startTime))
 
 
 # Prism core class, which holds various functions
@@ -309,9 +309,9 @@ class PrismCore:
                 sys.exit()
 
             endTime = datetime.now()
-            logger.debug("startup duration: %s" % (endTime-startTime))
+            logger.debug("startup duration: %s" % (endTime - startTime))
 
-        except Exception as e:
+        except Exception:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             erStr = "%s ERROR - PrismCore init %s:\n%s\n\n%s" % (
                 time.strftime("%d/%m/%y %X"),
@@ -557,7 +557,7 @@ class PrismCore:
         if not os.path.exists(cmdDir):
             try:
                 os.makedirs(cmdDir)
-            except:
+            except Exception:
                 return
 
         for i in sorted(os.listdir(cmdDir)):
@@ -572,7 +572,7 @@ class PrismCore:
             command = None
             try:
                 command = eval(cmdText)
-            except:
+            except Exception:
                 msg = "Could evaluate command: %s\n - %s" % (cmdText, traceback.format_exc()),
                 self.popup(msg)
 
@@ -613,7 +613,7 @@ class PrismCore:
         if not os.path.exists(cmdDir):
             try:
                 os.makedirs(cmdDir)
-            except:
+            except Exception:
                 return
 
         for i in os.listdir(cmdDir):
@@ -645,7 +645,7 @@ class PrismCore:
         if self.uiAvailable:
             try:
                 import SetPath
-            except:
+            except Exception:
                 modPath = imp.find_module("SetPath")[1]
                 if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
                     os.remove(modPath)
@@ -680,7 +680,7 @@ class PrismCore:
 
         try:
             os.makedirs(self.localProjectPath)
-        except:
+        except Exception:
             pass
 
         if os.path.exists(self.localProjectPath):
@@ -807,9 +807,9 @@ License: GNU GPL-3.0-or-later<br>
         fbDlg.l_info.setText(
             "Message for the developer:\n"
         )
-        fbDlg.te_text.setMinimumHeight(200*self.uiScaleFactor)
+        fbDlg.te_text.setMinimumHeight(200 * self.uiScaleFactor)
         fbDlg.l_description = QLabel("Please provide also contact information (e.g. e-mail) for further discussions and to receive answers to your questions.")
-        fbDlg.layout().insertWidget(fbDlg.layout().count()-1, fbDlg.l_description)
+        fbDlg.layout().insertWidget(fbDlg.layout().count() - 1, fbDlg.l_description)
         fbDlg.buttonBox.buttons()[0].setText("Send")
 
         fbDlg.l_screenGrab = QLabel()
@@ -822,14 +822,14 @@ License: GNU GPL-3.0-or-later<br>
         fbDlg.lo_screenGrab.addStretch()
         fbDlg.sp_main = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
-        fbDlg.layout().insertWidget(fbDlg.layout().count()-1, fbDlg.l_screenGrab)
-        fbDlg.layout().insertLayout(fbDlg.layout().count()-1, fbDlg.lo_screenGrab)
-        fbDlg.layout().insertItem(fbDlg.layout().count()-1, fbDlg.sp_main)
+        fbDlg.layout().insertWidget(fbDlg.layout().count() - 1, fbDlg.l_screenGrab)
+        fbDlg.layout().insertLayout(fbDlg.layout().count() - 1, fbDlg.lo_screenGrab)
+        fbDlg.layout().insertItem(fbDlg.layout().count() - 1, fbDlg.sp_main)
 
         fbDlg.b_addScreenGrab.clicked.connect(lambda: self.attachScreenGrab(fbDlg))
         fbDlg.b_removeScreenGrab.clicked.connect(lambda: self.removeScreenGrab(fbDlg))
         fbDlg.b_removeScreenGrab.setVisible(False)
-        fbDlg.resize(900*self.core.uiScaleFactor, 500*self.core.uiScaleFactor)
+        fbDlg.resize(900 * self.core.uiScaleFactor, 500 * self.core.uiScaleFactor)
         fbDlg.origSize = fbDlg.size()
 
         result = fbDlg.exec_()
@@ -865,7 +865,7 @@ License: GNU GPL-3.0-or-later<br>
             dlg.screenGrab = previewImg
             dlg.b_addScreenGrab.setVisible(False)
             dlg.b_removeScreenGrab.setVisible(True)
-            newPos = dlg.pos()-QPoint(0, pmscaled.height()*0.5)
+            newPos = dlg.pos() - QPoint(0, pmscaled.height() * 0.5)
             newPos.setY(max(0, newPos.y()))
             dlg.move(newPos)
 
@@ -925,12 +925,12 @@ License: GNU GPL-3.0-or-later<br>
             if self.uiAvailable:
                 try:
                     del sys.modules["StateManager"]
-                except:
+                except Exception:
                     pass
 
             try:
                 import StateManager
-            except:
+            except Exception:
                 try:
                     modPath = imp.find_module("StateManager")[1]
                     if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
@@ -991,12 +991,12 @@ License: GNU GPL-3.0-or-later<br>
             if self.uiAvailable:
                 try:
                     del sys.modules["ProjectBrowser"]
-                except:
+                except Exception:
                     pass
 
             try:
                 import ProjectBrowser
-            except:
+            except Exception:
                 try:
                     modPath = imp.find_module("ProjectBrowser")[1]
                     if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
@@ -1026,12 +1026,12 @@ License: GNU GPL-3.0-or-later<br>
         if not getattr(self, "dv", None) or self.debugMode:
             try:
                 del sys.modules["DependencyViewer"]
-            except:
+            except Exception:
                 pass
 
             try:
                 import DependencyViewer
-            except:
+            except Exception:
                 try:
                     modPath = imp.find_module("DependencyViewer")[1]
                     if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
@@ -1061,12 +1061,12 @@ License: GNU GPL-3.0-or-later<br>
             if not getattr(self, "ps", None) or self.debugMode or reload_module:
                 try:
                     del sys.modules["PrismSettings"]
-                except:
+                except Exception:
                     pass
 
             try:
                 import PrismSettings
-            except:
+            except Exception:
                 modPath = imp.find_module("PrismSettings")[1]
                 if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
                     os.remove(modPath)
@@ -1094,12 +1094,12 @@ License: GNU GPL-3.0-or-later<br>
 
         try:
             del sys.modules["PrismInstaller"]
-        except:
+        except Exception:
             pass
 
         try:
             import PrismInstaller
-        except:
+        except Exception:
             modPath = imp.find_module("PrismInstaller")[1]
             if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
                 os.remove(modPath)
@@ -1171,7 +1171,7 @@ License: GNU GPL-3.0-or-later<br>
             elif len(cData) == 2:
                 try:
                     step = int(cData[1])
-                except:
+                except Exception:
                     continue
             else:
                 step = 1
@@ -1181,12 +1181,12 @@ License: GNU GPL-3.0-or-later<br>
                 try:
                     start = int(se[0])
                     end = int(se[1])
-                except:
+                except Exception:
                     continue
             elif len(se) == 1:
                 try:
                     frame = int(se[0])
-                except:
+                except Exception:
                     continue
                 if frame not in rframes:
                     rframes.append(frame)
@@ -1638,7 +1638,7 @@ License: GNU GPL-3.0-or-later<br>
 
         try:
             self.pb.refreshCurrent()
-        except:
+        except Exception:
             pass
 
         return filepath
@@ -1690,12 +1690,12 @@ License: GNU GPL-3.0-or-later<br>
 
         try:
             del sys.modules["SaveComment"]
-        except:
+        except Exception:
             pass
 
         try:
             import SaveComment
-        except:
+        except Exception:
             modPath = imp.find_module("SaveComment")[1]
             if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
                 os.remove(modPath)
@@ -1866,7 +1866,7 @@ License: GNU GPL-3.0-or-later<br>
         if os.path.isabs(path):
             try:
                 os.makedirs(path)
-            except:
+            except Exception:
                 pass
 
         if os.path.exists(path) and showMessage:
@@ -1937,7 +1937,7 @@ License: GNU GPL-3.0-or-later<br>
                 if thread and thread.canceled:
                     try:
                         os.remove(dst)
-                    except:
+                    except Exception:
                         pass
                     return
 
@@ -1948,7 +1948,7 @@ License: GNU GPL-3.0-or-later<br>
         return dst
 
     @err_catcher(name=__name__)
-    def copyfileobj(self, fsrc, fdst, total, thread=None, length=16*1024):
+    def copyfileobj(self, fsrc, fdst, total, thread=None, length=16 * 1024):
         copied = 0
         prevPrc = -1
         while True:
@@ -1998,7 +1998,7 @@ License: GNU GPL-3.0-or-later<br>
     def createShortcutDeprecated(self, vPath, vTarget="", args="", vWorkingDir="", vIcon=""):
         try:
             import win32com.client
-        except:
+        except Exception:
             self.popup("Failed to create shortcut.")
             return
 
@@ -2015,7 +2015,7 @@ License: GNU GPL-3.0-or-later<br>
 
         try:
             shortcut.save()
-        except:
+        except Exception:
             msg = "Could not create shortcut:\n\n%s\n\nProbably you don't have permissions to write to this folder. To fix this install Prism to a different location or change the permissions of this folder." % self.fixPath(vPath)
             self.popup(msg)
 
@@ -2336,7 +2336,7 @@ License: GNU GPL-3.0-or-later<br>
 
                 self.popup("Sent message successfully", severity="info")
 
-        except Exception as e:
+        except Exception:
             if quiet:
                 logger.debug("Sending message failed: %s" % traceback.format_exc())
             else:
@@ -2651,7 +2651,7 @@ License: GNU GPL-3.0-or-later<br>
                 )
                 try:
                     open(prjErPath, "a").close()
-                except:
+                except Exception:
                     pass
 
                 if os.path.exists(prjErPath):
@@ -2666,14 +2666,14 @@ License: GNU GPL-3.0-or-later<br>
 
                 try:
                     open(userErPath, "a").close()
-                except:
+                except Exception:
                     pass
 
                 if platform.system() in ["Linux", "Darwin"]:
                     if os.path.exists(userErPath):
                         try:
                             os.chmod(userErPath, 0o777)
-                        except:
+                        except Exception:
                             pass
 
                 if os.path.exists(userErPath):
@@ -2682,7 +2682,7 @@ License: GNU GPL-3.0-or-later<br>
 
                 self.lastErrorTime = time.time()
 
-        except:
+        except Exception:
             msg = "ERROR - writeErrorLog - %s\n\n%s" % (traceback.format_exc(), text)
             logger.warning(msg)
 
@@ -2714,7 +2714,7 @@ If this plugin is an official Prism plugin, please submit this error to the deve
             if "UnicodeDecodeError" in text or "UnicodeEncodeError" in text:
                 msg = "The previous error might be caused by the use of special characters (like ö or é). Prism doesn't support this at the moment. Make sure you remove these characters from your filepaths.".decode("utf8")
                 self.popup(msg)
-        except:
+        except Exception:
             msg = "ERROR - writeErrorLog - %s\n\n%s" % (traceback.format_exc(), text)
             logger.warning(msg)
 
@@ -2754,7 +2754,7 @@ If this plugin is an official Prism plugin, please submit this error to the deve
         l_description = QLabel(dtext)
         l_info = QLabel(ptext)
         msg.te_info = QPlainTextEdit("""Your email:\n\n\nWhat happened:\n\n\nHow to reproduce:\n\n\nOther notes:\n\n""")
-        msg.te_info.setMinimumHeight(300*self.uiScaleFactor)
+        msg.te_info.setMinimumHeight(300 * self.uiScaleFactor)
 
         b_send = QPushButton("Report anonymously")
         b_ok = QPushButton("Close")
@@ -2790,11 +2790,11 @@ If this plugin is an official Prism plugin, please submit this error to the deve
         msg.lo_screenGrab.addStretch()
         msg.sp_main = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
-        msg.layout().insertWidget(msg.layout().count()-1, msg.l_screenGrab)
-        msg.layout().insertLayout(msg.layout().count()-1, msg.lo_screenGrab)
-        msg.layout().insertItem(msg.layout().count()-1, msg.sp_main)
+        msg.layout().insertWidget(msg.layout().count() - 1, msg.l_screenGrab)
+        msg.layout().insertLayout(msg.layout().count() - 1, msg.lo_screenGrab)
+        msg.layout().insertItem(msg.layout().count() - 1, msg.sp_main)
 
-        size = QSize(msg.size().width(), msg.size().height()*0.5)
+        size = QSize(msg.size().width(), msg.size().height() * 0.5)
         msg.b_addScreenGrab.clicked.connect(lambda: self.attachScreenGrab(msg, size))
         msg.b_removeScreenGrab.clicked.connect(lambda: self.removeScreenGrab(msg))
         msg.b_removeScreenGrab.setVisible(False)

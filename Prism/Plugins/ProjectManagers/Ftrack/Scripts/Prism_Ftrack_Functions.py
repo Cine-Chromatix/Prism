@@ -147,6 +147,10 @@ class Prism_Ftrack_Functions(object):
 
     @err_catcher(name=__name__)
     def onProjectChanged(self, origin):
+        if (hasattr(self, 'session') or hasattr(self, 'ftrackProjectName')):
+            del self.session
+            del self.ftrackProjectName
+
         if hasattr(self, "ftrack"):
             del self.ftrack
 
@@ -817,6 +821,8 @@ class Prism_Ftrack_Functions(object):
         ftrackSite = self.core.getConfig('ftrack', 'site', configPath=self.core.prismIni)
         ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
         user_security_roles = session.query('UserSecurityRole where user.username is "{0}"'.format(ftrackUsername)).all()
+        entity = None
+        userRole = None
 
         for i in user_security_roles:
             userRole = i['security_role']['type']
