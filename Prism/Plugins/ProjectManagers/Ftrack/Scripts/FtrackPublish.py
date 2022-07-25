@@ -70,6 +70,7 @@ path = r'D:\dev\GitHub\Prism-CXPlugin\Scripts'
 sys.path.append(path)
 import Prism_CXPlugin_Functions
 
+
 class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
     def __init__(self, core, origin, ptype, shotName, task, version, sources, startFrame, endFrame):
         QDialog.__init__(self)
@@ -226,7 +227,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
             return
 
         text = self.cb_shot.currentText()
-        curShot = [x for x in self.ftrackDict if x['name'] == text.split(self.core.sequenceSeparator)[1]][0]
+        curShot = [x for x in self.ftrackDict if x['name'] == text.split(self.core.sequenceSeparator)[1] and x['parent']['name'] == text.split(self.core.sequenceSeparator)[0]][0]
         curTask = [x for x in self.ftrackTasks if x["name"] == self.cb_task.currentText() and x['parent']['parent']['name'] == text.split(self.core.sequenceSeparator)[0]][0]
 
         def frames_to_TC(frames):
@@ -363,6 +364,9 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                     erStr = "ERROR:\n%s" % traceback.format_exc()
                     QMessageBox.warning(self.core.messageParent, "Ftrack Publish", erStr)
                     return
+
+            # QMessageBox.warning(self.core.messageParent, "asset parent", asset['parent']['parent']['name'] + '-' + asset['parent']['name'])
+            # QMessageBox.warning(self.core.messageParent, "curTask parent", curTask['parent']['parent']['name'] + '-' + curTask['parent']['name'])
 
             data = {}
             data = {
