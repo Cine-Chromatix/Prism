@@ -92,7 +92,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
         if ftrackData[0] is None or ftrackData[1] is None:
             return
 
-        self.session, self.ftrackProjectName, self.ftrackUserId = ftrackData
+        self.session, self.ftrackProjectName, self.ftrackUser = ftrackData
 
         self.core.appPlugin.ftrackPublish_startup(self)
 
@@ -381,7 +381,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                 createdVersion = self.session.create("AssetVersion", data)
                 self.session.commit()
 
-                user = self.session.query('User where id is "{0}"'.format(self.ftrackUserId)).first()
+                user = self.session.query('User where name is "{0}"'.format(self.ftrackUser)).first()
                 note = self.session.create('Note', {
                     'content': self.te_description.toPlainText(),
                     'author': user

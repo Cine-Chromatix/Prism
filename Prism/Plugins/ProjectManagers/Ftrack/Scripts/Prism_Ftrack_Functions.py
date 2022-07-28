@@ -436,7 +436,7 @@ class Prism_Ftrack_Functions(object):
 
     @err_catcher(name=__name__)
     def connectToFtrack(self, user=True):
-        if (not hasattr(self, 'session') or not hasattr(self, 'ftrackProjectName') or (user and not hasattr(self, 'ftrackUserId'))):
+        if (not hasattr(self, 'session') or not hasattr(self, 'ftrackProjectName') or (user and not hasattr(self, 'ftrackUser'))):
 
             import ftrack_api
 
@@ -504,17 +504,17 @@ class Prism_Ftrack_Functions(object):
                 QMessageBox.warning(self.core.messageParent, "Ftrack", "No user \"%s\" is assigned to the project." % userName)
                 return [self.session, self.ftrackProjectName, None]
 
-            self.ftrackUserId = ftrackUser["id"]
+            self.ftrackUser = userName  # ftrackUser["id"]
 
         if user:
-            return [self.session, self.ftrackProjectName, self.ftrackUserId]
+            return [self.session, self.ftrackProjectName, self.ftrackUser]
         else:
             return [self.session, self.ftrackProjectName, None]
 
     # Überarbeiten
     @err_catcher(name=__name__)
     def createFtrackAssets(self, assets=[]):
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
         if ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
@@ -605,7 +605,7 @@ class Prism_Ftrack_Functions(object):
 
     @err_catcher(name=__name__)
     def createFtrackShots(self, shots=[]):
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
         if ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
@@ -786,7 +786,7 @@ class Prism_Ftrack_Functions(object):
             startFrame=sf,
             endFrame=ef,
         )
-        if not hasattr(ftp, 'ftrackProjectName') or not hasattr(ftp, 'ftrackUserId'):
+        if not hasattr(ftp, 'ftrackProjectName') or not hasattr(ftp, 'ftrackUser'):
             return
 
         self.core.parentWindow(ftp)
@@ -804,7 +804,7 @@ class Prism_Ftrack_Functions(object):
 
     @err_catcher(name=__name__)
     def openftrack(self, taskName=None, eType='', path=''):
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=True)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
         if ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
@@ -819,8 +819,8 @@ class Prism_Ftrack_Functions(object):
         ftrackPrj = session.query('Project where name is "{0}"'.format(ftrackProjectName)).first()
         ftrackPrjId = ftrackPrj['id']
         ftrackSite = self.core.getConfig('ftrack', 'site', configPath=self.core.prismIni)
-        ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
-        user_security_roles = session.query('UserSecurityRole where user.username is "{0}"'.format(ftrackUsername)).all()
+        # ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
+        user_security_roles = session.query('UserSecurityRole where user.username is "{0}"'.format(ftrackUser)).all()
         entity = None
         userRole = None
 
@@ -906,7 +906,7 @@ class Prism_Ftrack_Functions(object):
         sys.path.append(path)
         from Prism_CXPlugin_Functions import Prism_CXPlugin_Functions
 
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
         if ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
@@ -986,7 +986,7 @@ class Prism_Ftrack_Functions(object):
     @err_catcher(name=__name__)
     def LocalAssetsToFtrack(self, origin):
         # add code here
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
         if ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
@@ -1116,10 +1116,11 @@ class Prism_Ftrack_Functions(object):
     def FtrackShotsToLocal(self, origin):
         # add code here
         path = os.path.join(self.core.pluginPathCustom, 'CXPlugin', 'Scripts')
+
         sys.path.append(path)
         from Prism_CXPlugin_Functions import Prism_CXPlugin_Functions
 
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
         if ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
@@ -1245,9 +1246,9 @@ class Prism_Ftrack_Functions(object):
     @err_catcher(name=__name__)
     def LocalShotsToFtrack(self, origin):
         # add code here
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=False)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
-        if session is None or ftrackProjectName is None or ftrackUserId:
+        if session is None or ftrackProjectName is None or ftrackUser:
             return
 
         ftrackShots = {}
@@ -1433,7 +1434,7 @@ class Prism_Ftrack_Functions(object):
 
     @err_catcher(name=__name__)
     def onSceneOpen(self, origin, filepath):
-        session, ftrackProjectName, ftrackUserId = self.connectToFtrack(user=True)
+        session, ftrackProjectName, ftrackUser = self.connectToFtrack(user=True)
 
         if ftrackProjectName is None:
             ftrackProjectName = self.core.getConfig('ftrack', 'projectname', configPath=self.core.prismIni)
@@ -1450,8 +1451,8 @@ class Prism_Ftrack_Functions(object):
             assetName = pathList[-5]
 
         checklist = ['Not started', 'Awaiting Approval CX', 'Retakes']
-        ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
-        task = session.query('Task where project.name is "{0}" and name is "{1}" and assignments any (resource.username = "{4}") and (parent.name is "{2}" or parent.parent.name is "{3}") or (parent.parent.name is "{2}" or parent.parent.parent.name is "{3}")'.format(ftrackProjectName, taskName, assetName, seqName, ftrackUsername)).first()
+        # ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
+        task = session.query('Task where project.name is "{0}" and name is "{1}" and assignments any (resource.username = "{4}") and (parent.name is "{2}" or parent.parent.name is "{3}") or (parent.parent.name is "{2}" or parent.parent.parent.name is "{3}")'.format(ftrackProjectName, taskName, assetName, seqName, ftrackUser)).first()
 
         if task is None:
             # add option to proceed or cancel
@@ -1473,7 +1474,7 @@ class Prism_Ftrack_Functions(object):
         sys.path.append(path)
         from Prism_CXPlugin_Functions import Prism_CXPlugin_Functions
 
-        self.session, self.ftrackProjectName, self.ftrackUserId = self.connectToFtrack(user=True)
+        self.session, self.ftrackProjectName, self.ftrackUser = self.connectToFtrack(user=True)
 
         class Window(QDialog):
             def __init__(self):
