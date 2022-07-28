@@ -1,3 +1,6 @@
+v1.3.0.90:
+- bugFix Ftrackplugin
+
 v1.3.0.89:
 - Tasks implementation inside Prism Browser
 - moved the Ftrack-plugin to root location
