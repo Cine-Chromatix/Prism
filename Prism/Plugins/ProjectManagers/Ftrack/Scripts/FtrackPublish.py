@@ -403,8 +403,8 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                 createdVersion.create_component(sequenceName, {'name': 'Global SequencePath'}, location=local_location)
                 createdVersion.create_component(scenefile, {'name': 'Global SceneFilePath'}, location=local_location)
 
-                exportFilePath = scenefile.split('.')[0] + 'versionInfo.yml'
-                exportFile = self.core.getConfig("information", "export-path", configPath=exportFilePath)
+                # exportFilePath = scenefile.split('.')[0] + 'versionInfo.yml'
+                # exportFile = self.core.getConfig("information", "export-path", configPath=exportFilePath)
 
                 # if exportFile is None:
                 #     QMessageBox.warning(self.core.messageParent, "Warning", 'No Exportfile has been created with this Version.')
