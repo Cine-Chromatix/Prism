@@ -1451,9 +1451,9 @@ class Prism_Ftrack_Functions(object):
             assetName, seqName = self.core.entities.splitShotname(pathList[-5])
         else:
             assetName = pathList[-5]
+            seqName = pathList[-6]
 
         checklist = ['Not started', 'Awaiting Approval CX', 'Retakes']
-        # ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
         task = session.query('Task where project.name is "{0}" and name is "{1}" and assignments any (resource.username = "{4}") and (parent.name is "{2}" or parent.parent.name is "{3}") or (parent.parent.name is "{2}" or parent.parent.parent.name is "{3}")'.format(ftrackProjectName, taskName, assetName, seqName, ftrackUser)).first()
 
         if task is None:
