@@ -585,13 +585,14 @@ class Prism_CXPlugin_Functions(object):
         from Prism_Ftrack_Functions import Prism_Ftrack_Functions
         from collections import defaultdict
 
-        session, ftrackProjectName, ftrackUserId = Prism_Ftrack_Functions.connectToFtrack(self, user=False)
+        session, ftrackProjectName, ftrackUser = Prism_Ftrack_Functions.connectToFtrack(self, user=True)
+        # QMessageBox.warning(self.core.messageParent, 'ftrackUser', str(ftrackUser))
+
         if session is None or ftrackProjectName is None:
             return
 
-        ftrackUsername = self.core.getConfig('ftrack', 'ftrackusername')
         schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
-        ftrackTasks = session.query('Task where project.name is "{0}" and (parent.object_type.name is "{1}" or parent.parent.object_type.name is "{1}") and assignments any (resource.username = "{2}")'.format(ftrackProjectName, entity, ftrackUsername))
+        ftrackTasks = session.query('Task where project.name is "{0}" and (parent.object_type.name is "{1}" or parent.parent.object_type.name is "{1}") and assignments any (resource.username = "{2}")'.format(ftrackProjectName, entity, ftrackUser))
         ftrackDict = defaultdict(list)
 
         if schema == 'CXL-Schema':

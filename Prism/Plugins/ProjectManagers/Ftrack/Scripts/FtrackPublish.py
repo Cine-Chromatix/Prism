@@ -92,7 +92,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
         if ftrackData[0] is None or ftrackData[1] is None:
             return
 
-        self.session, self.ftrackProjectName, self.ftrackUserId = ftrackData
+        self.session, self.ftrackProjectName, self.ftrackUser = ftrackData
 
         self.core.appPlugin.ftrackPublish_startup(self)
 
@@ -381,7 +381,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                 createdVersion = self.session.create("AssetVersion", data)
                 self.session.commit()
 
-                user = self.session.query('User where id is "{0}"'.format(self.ftrackUserId)).first()
+                user = self.session.query('User where username is "{0}"'.format(self.ftrackUser)).first()
                 note = self.session.create('Note', {
                     'content': self.te_description.toPlainText(),
                     'author': user
@@ -403,22 +403,22 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                 createdVersion.create_component(sequenceName, {'name': 'Global SequencePath'}, location=local_location)
                 createdVersion.create_component(scenefile, {'name': 'Global SceneFilePath'}, location=local_location)
 
-                exportFilePath = scenefile.split('.')[0] + 'versionInfo.yml'
-                exportFile = self.core.getConfig("information", "export-path", configPath=exportFilePath)
+                # exportFilePath = scenefile.split('.')[0] + 'versionInfo.yml'
+                # exportFile = self.core.getConfig("information", "export-path", configPath=exportFilePath)
 
-                if exportFile is None:
-                    QMessageBox.warning(self.core.messageParent, "Warning", 'No Exportfile has been created with this Version.')
-                else:
-                    exportFileList = exportFile.split(', ')
-                    exportFileList.pop()
-                    exportNewFileList = []
+                # if exportFile is None:
+                #     QMessageBox.warning(self.core.messageParent, "Warning", 'No Exportfile has been created with this Version.')
+                # else:
+                #     exportFileList = exportFile.split(', ')
+                #     exportFileList.pop()
+                #     exportNewFileList = []
 
-                    for i in exportFileList:
-                        exportNewFileList.append(os.path.normpath(pre + i.rpartition(project)[2]))
+                #     for i in exportFileList:
+                #         exportNewFileList.append(os.path.normpath(pre + i.rpartition(project)[2]))
 
-                    exportFile = ', '.join(exportNewFileList)
-                    # exportFile = os.path.normpath(pre + exportFile.rpartition(project)[2])
-                    createdVersion.create_component(exportFile, {'name': 'Global ExportFilePath'}, location=local_location)
+                #     exportFile = ', '.join(exportNewFileList)
+                #     # exportFile = os.path.normpath(pre + exportFile.rpartition(project)[2])
+                #     # createdVersion.create_component(exportFile, {'name': 'Global ExportFilePath'}, location=local_location)
 
                 if os.path.exists(imgPath):
                     thumbnail_component = self.session.create_component(imgPath, dict(name='thumbnail'), location=server_location)
