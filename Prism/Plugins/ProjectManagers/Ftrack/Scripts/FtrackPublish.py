@@ -164,8 +164,9 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
         self.cb_task.clear()
         self.ftrackTasks = []
         shotName, seqName = self.core.entities.splitShotname(self.shotName)
+
         for i in self.ftrackDict:
-            if i['name'] == shotName and i['parent']['name'] == seqName:
+            if i['name'] == shotName and (i['parent']['name'] == seqName or seqName == 'no sequence'):
                 self.ftrackTasks = self.ftrackDict[i]
 
         for x in self.ftrackTasks:

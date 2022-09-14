@@ -746,6 +746,7 @@ class Prism_Ftrack_Functions(object):
 
         shotName = os.path.basename(origin.renderBasePath)
         taskName = (origin.curRTask.replace(' (playblast)', '').replace(' (2d)', '').replace(' (external)', ''))
+
         versionName = origin.curRVersion.replace(' (local)', '')
         mpb = origin.mediaPlaybacks['shots']
 
@@ -786,6 +787,7 @@ class Prism_Ftrack_Functions(object):
             startFrame=sf,
             endFrame=ef,
         )
+
         if not hasattr(ftp, 'ftrackProjectName') or not hasattr(ftp, 'ftrackUser'):
             return
 
