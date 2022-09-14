@@ -147,14 +147,11 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                     self.core.sequenceSeparator,
                     x['name']
                 )
+                self.shotList[name] = x['name']
             else:
                 name = x['name']
                 localHierarchy = os.path.join(x['_link'][2:][0]['name'], name)
-
-            try:
                 self.shotList[name] = localHierarchy
-            except Exception:
-                self.shotList[name] = x['name']
 
         self.cb_shot.addItems(sorted(self.shotList.keys(), key=lambda s: s.lower()))
         self.updateTasks()
@@ -168,6 +165,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
         for i in self.ftrackDict:
             if i['name'] == shotName and (i['parent']['name'] == seqName or seqName == 'no sequence'):
                 self.ftrackTasks = self.ftrackDict[i]
+                self.curShot = i
 
         for x in self.ftrackTasks:
             if x['name'] == self.task:
@@ -227,9 +225,8 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
             )
             return
 
-        text = self.cb_shot.currentText()
-        curShot = [x for x in self.ftrackDict if x['name'] == text.split(self.core.sequenceSeparator)[1] and x['parent']['name'] == text.split(self.core.sequenceSeparator)[0]][0]
-        curTask = [x for x in self.ftrackTasks if x["name"] == self.cb_task.currentText() and x['parent']['parent']['name'] == text.split(self.core.sequenceSeparator)[0]][0]
+        curShot = self.curShot
+        curTask = self.curTask
 
         def frames_to_TC(frames):
             h = int(frames / 180000)
@@ -239,10 +236,10 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
 
         pubVersions = []
         for source in self.fileSources:
-            versionInfoPath = os.path.join(os.path.dirname(source[0]), "versionInfo.yml")
+            versionInfoPath = os.path.join(os.path.dirname(source[0]), "versioninfo.yml")
             if not os.path.exists(versionInfoPath):
                 versionInfoPath = os.path.join(
-                    os.path.dirname(os.path.dirname(source[0])), "versionInfo.yml"
+                    os.path.dirname(os.path.dirname(source[0])), "versioninfo.yml"
                 )
 
                 if not os.path.exists(versionInfoPath):
