@@ -78,7 +78,7 @@ class Prism_CXPlugin_Functions(object):
             active = True
             site = 'https://cine-chromatix.ftrackapp.com'
             projectname = ''
-            username = 'christian'
+            username = 'danko'
             apikey = 'YjhkZWZjNTMtNTgyOS00YjMxLWEzZWItZTQxYzQ3YTNiNjg5OjpmZjZlMDMyYi05OWJlLTQ1MmQtOTQ5Ny0wNThjN2NkYjNjZTM'
 
             self.core.setConfig('ftrack', 'active', active, configPath=self.core.prismIni)
@@ -340,7 +340,7 @@ class Prism_CXPlugin_Functions(object):
         schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
 
         if schema == 'CXL-Schema':
-            globalProjectPath = core.projectPath[:-1]
+            globalProjectPath = self.core.projectPath[:-1]
             kkn_rep = os.sep.join((globalProjectPath, "00_Pipeline", "CustomModules", "KKN_Repo"))
             step = kwargs["scenefile"].split(os.path.sep)[-3]
 

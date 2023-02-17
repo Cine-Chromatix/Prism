@@ -1454,14 +1454,15 @@ class Prism_Ftrack_Functions(object):
             seqName = pathList[-6]
 
         checklist = ['Not started', 'Awaiting Approval CX', 'Retakes']
-        task = session.query('Task where project.name is "{0}" and name is "{1}" and assignments any (resource.username = "{4}") and (parent.name is "{2}" or parent.parent.name is "{3}") or (parent.parent.name is "{2}" or parent.parent.parent.name is "{3}")'.format(ftrackProjectName, taskName, assetName, seqName, ftrackUser)).first()
+        
+        task = session.query('Task where name is "{0}" and project.name is "{1}" and (parent.name is "{2}" or parent.parent.name is "{2}")'.format(taskName, ftrackProjectName, assetName)).first()
 
         if task is None:
             # add option to proceed or cancel
             QMessageBox.warning(self.core.messageParent, 'Warning!!! Task is not Found', 'The Task you are currently working on is not assigned to you!' + '\n\n' + 'If you have any questions, please contact your project manager.')
         else:
             status = session.query('Status where name is "{0}"'.format('In Progress')).first()
-
+            
             if task['status']['name'] == 'On Hold':
                 QMessageBox.warning(self.core.messageParent, 'Warning!!! Task is On Hold', 'The task you are working on is temporarily on hold!' + '\n\n' + 'If you have any questions, please contact your project manager.')
             if task['status']['name'] == 'Final':
