@@ -65,8 +65,10 @@ except Exception:
     modPath = imp.query_module("CreateItem")[1]
     if modPath.endswith(".pyc") and os.path.exists(modPath[:-1]):
         os.remove(modPath)
+# 20221216 - change by Danko
+# path = r'D:\dev\GitHub\Prism-CXPlugin\Scripts'
+path = r'C:\Prism\Plugins\Custom\CXPlugin\Scripts'
 
-path = r'D:\dev\GitHub\Prism-CXPlugin\Scripts'
 sys.path.append(path)
 import Prism_CXPlugin_Functions
 
@@ -160,6 +162,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
     def updateTasks(self, idx=None):
         self.cb_task.clear()
         self.ftrackTasks = []
+        # shotName is also assetName, seqName is also parentName
         shotName, seqName = self.core.entities.splitShotname(self.shotName)
 
         for i in self.ftrackDict:
@@ -167,13 +170,16 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                 self.ftrackTasks = self.ftrackDict[i]
                 self.curShot = i
 
+        success = False
         for x in self.ftrackTasks:
             if x['name'] == self.task:
                 self.curTask = x
-            else:
-                self.curTask = None
-                QMessageBox.warning(self.core.messageParent, "Ftrack Publish", "That %s has not been assignt to you." % self.ptype,)
-                return
+                success = True
+
+        if success is False:
+            self.curTask = None
+            QMessageBox.warning(self.core.messageParent, "Ftrack Publish", "That %s has not been assignt to you." % self.ptype,)
+            return
 
         if len(self.ftrackTasks) == 0:
             QMessageBox.warning(self.core.messageParent, "Ftrack Publish", "That %s has not been assignt to you." % self.ptype,)
