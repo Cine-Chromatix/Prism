@@ -331,6 +331,55 @@ class Prism_CXPlugin_Functions(object):
 
         self.core.setConfig("information", "export-path", kwargs["outputpath"], configPath=versionInfoPath)
 
+        import maya.cmds as mc
+        import maya.mel as mel
+
+        # Create UV-Shell-ID Set for Unreal Vertex Colors
+        mc.select(all=True)
+        scene_content = mc.ls(sl=True)
+        mc.select(d=True)
+
+        for elem in scene_content:
+            if 'MSH_' in elem:
+                mc.select(elem, r=True)
+                current_sets = mc.polyUVSet(q=True, auv=True)
+                if 'shell_id' not in current_sets:
+                    mc.polyUVSet(uvs='map1', cp=True)
+                    mc.polyUVSet(uvs='uvSet1', nuv='shell_id', rn=True)
+                mc.polyUVSet(uvs='shell_id', cuv=True)
+
+                mel.eval('selectMode -co; selectType -pf 1; SelectAll;')
+                shells = mc.polyEvaluate(usi=True)
+                shells = list(set(shells))
+
+                u_val = 0.05
+                v_val = 0.05
+                x = 0
+                for shell in shells:
+                    x += 1
+                    uvs = mc.polyEvaluate(uis=shell)
+                    mc.select(d=True)
+                    mel.eval('selectType -puv 1;')
+                    for elem in uvs:
+                        mc.select(elem, add=True)
+                        single_uvs = mc.ls(sl=True, fl=True)
+                        for uv in single_uvs:
+                            mc.select(uv, r=True)
+                            mc.polyEditUV(r=False, u=u_val, v=v_val)
+                    if x < 10:
+                        u_val += 0.1
+                    else:
+                        v_val += 0.1
+                        u_val = 0.05
+                        x = 0
+
+                mel.eval('selectMode -o')
+
+                mc.polyUVSet(uvs='map1', cuv=True)
+            else:
+                pass
+        mc.select(d=True)
+
     @err_catcher(name=__name__)
     def postExport(self, *args, **kwargs):
         pass
@@ -593,6 +642,7 @@ class Prism_CXPlugin_Functions(object):
 
         schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
         ftrackTasks = session.query('Task where project.name is "{0}" and (parent.object_type.name is "{1}" or parent.parent.object_type.name is "{1}") and assignments any (resource.username = "{2}")'.format(ftrackProjectName, entity, ftrackUser))
+        # QMessageBox.warning(self.core.messageParent, 'taskname', str(ftrackTasks))
         ftrackDict = defaultdict(list)
 
         if schema == 'CXL-Schema':
