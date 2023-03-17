@@ -93,7 +93,10 @@ class ExportClass(object):
             outputFormats = sorted(set(outputFormats))
         else:
             outputFormats = self.core.appPlugin.outputFormats
-
+        
+        # CX change 20230317 --> limit to fbx + ma
+        outputFormats = ['.fbx', '.ma']
+        
         self.cb_outType.addItems(outputFormats)
         self.export_paths = self.core.paths.getExportProductBasePaths()
         self.cb_outPath.addItems(list(self.export_paths.keys()))
