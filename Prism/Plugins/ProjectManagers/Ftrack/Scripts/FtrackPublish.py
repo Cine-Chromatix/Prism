@@ -346,7 +346,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
             asset_name = curTask['name']
             asset = self.session.query('Asset where name is "{0}" and parent.id is "{1}"'.format(asset_name, curShot['id'])).first()
             asset_type = self.session.query('AssetType where name is "{0}"'.format('Upload')).one()  # Undedingt Ändern!!!
-            status = self.session.query('Status where name is "{0}"'.format('Awaiting Approval CX')).one()
+            status = self.session.query('Status where name is "{0}"'.format('Awaiting Client Approval')).one()
             version = self.taskVersion[1:5]
             local_location = self.session.query('Location where name is "ftrack.unmanaged"').one()
             server_location = self.session.query('Location where name is "ftrack.server"').one()
