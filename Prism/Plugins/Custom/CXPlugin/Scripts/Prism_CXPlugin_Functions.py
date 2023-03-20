@@ -335,47 +335,56 @@ class Prism_CXPlugin_Functions(object):
         import maya.mel as mel
 
         # Create UV-Shell-ID Set for Unreal Vertex Colors
-        mc.select(all=True)
+        mc.select(all=True, hi=True)
         scene_content = mc.ls(sl=True)
         mc.select(d=True)
 
         for elem in scene_content:
             if 'MSH_' in elem:
-                mc.select(elem, r=True)
-                current_sets = mc.polyUVSet(q=True, auv=True)
-                if 'shell_id' not in current_sets:
-                    mc.polyUVSet(uvs='map1', cp=True)
-                    mc.polyUVSet(uvs='uvSet1', nuv='shell_id', rn=True)
-                mc.polyUVSet(uvs='shell_id', cuv=True)
+                if 'Shape' in elem:
+                    pass
+                elif 'SG' in elem:
+                    pass
+                else:
+                    print('--- Creating IDs for {} ---'.format(elem))
+                    mc.select(elem, r=True)
+                    current_sets = mc.polyUVSet(q=True, auv=True)
+                    if 'shell_id' not in current_sets:
+                        mc.polyUVSet(uvs='map1', cp=True)
+                        mc.polyUVSet(uvs='uvSet1', nuv='shell_id', rn=True)
+                    mc.polyUVSet(uvs='shell_id', cuv=True)
 
-                mel.eval('selectMode -co; selectType -pf 1; SelectAll;')
-                shells = mc.polyEvaluate(usi=True)
-                shells = list(set(shells))
+                    mel.eval('selectMode -co; selectType -pf 1; SelectAll;')
+                    shells = mc.polyEvaluate(usi=True)
+                    shells = list(set(shells))
 
-                u_val = 0.05
-                v_val = 0.05
-                x = 0
-                for shell in shells:
-                    x += 1
-                    uvs = mc.polyEvaluate(uis=shell)
-                    mc.select(d=True)
-                    mel.eval('selectType -puv 1;')
-                    for elem in uvs:
-                        mc.select(elem, add=True)
-                        single_uvs = mc.ls(sl=True, fl=True)
-                        for uv in single_uvs:
-                            mc.select(uv, r=True)
-                            mc.polyEditUV(r=False, u=u_val, v=v_val)
-                    if x < 10:
-                        u_val += 0.1
-                    else:
-                        v_val += 0.1
-                        u_val = 0.05
-                        x = 0
+                    u_val = 0.05
+                    v_val = 0.05
+                    x = 0
+                    for shell in shells:
+                        x += 1
+                        if isinstance(shell, int):
+                            uvs = mc.polyEvaluate(uis=shell)
+                        else:
+                            pass
+                        mc.select(d=True)
+                        mel.eval('selectType -puv 1;')
+                        for elem in uvs:
+                            mc.select(elem, add=True)
+                            single_uvs = mc.ls(sl=True, fl=True)
+                            for uv in single_uvs:
+                                mc.select(uv, r=True)
+                                mc.polyEditUV(r=False, u=u_val, v=v_val)
+                        if x < 10:
+                            u_val += 0.1
+                        else:
+                            v_val += 0.1
+                            u_val = 0.05
+                            x = 0
 
-                mel.eval('selectMode -o')
+                    mel.eval('selectMode -o')
 
-                mc.polyUVSet(uvs='map1', cuv=True)
+                    mc.polyUVSet(uvs='map1', cuv=True)
             else:
                 pass
         mc.select(d=True)
