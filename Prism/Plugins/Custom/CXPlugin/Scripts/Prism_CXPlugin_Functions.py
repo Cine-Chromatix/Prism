@@ -395,130 +395,132 @@ class Prism_CXPlugin_Functions(object):
 
     @err_catcher(name=__name__)
     def prePlayblast(self, *args, **kwargs):
-        schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
+        pass
+        # schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
 
-        if schema == 'CXL-Schema':
-            globalProjectPath = self.core.projectPath[:-1]
-            kkn_rep = os.sep.join((globalProjectPath, "00_Pipeline", "CustomModules", "KKN_Repo"))
-            step = kwargs["scenefile"].split(os.path.sep)[-3]
+        # if schema == 'CXL-Schema':
+        #     globalProjectPath = self.core.projectPath[:-1]
+        #     kkn_rep = os.sep.join((globalProjectPath, "00_Pipeline", "CustomModules", "KKN_Repo"))
+        #     step = kwargs["scenefile"].split(os.path.sep)[-3]
 
-            try:
-                if kkn_rep not in sys.path:
-                    print(kkn_rep, " appended to sys")
-                    sys.path.append(kkn_rep)
-                    sys.path.append(os.sep.join((kkn_rep, "Maya")))
+        #     try:
+        #         if kkn_rep not in sys.path:
+        #             print(kkn_rep, " appended to sys")
+        #             sys.path.append(kkn_rep)
+        #             sys.path.append(os.sep.join((kkn_rep, "Maya")))
 
-                else:
-                    print(kkn_rep, "is already appended")
-                import KKN_Library
+        #         else:
+        #             print(kkn_rep, "is already appended")
+        #         import KKN_Library
 
-                reload(KKN_Library)
+        #         reload(KKN_Library)
 
-            except Exception as e:
-                mc.warning(e)
+        #     except Exception as e:
+        #         mc.warning(e)
 
-            if step == 'anm':
-                prismData = KKN_Library.file_handling.get_prism_data('maya')
-                characterName = prismData['taskName'].split('-')[0]
+        #     if step == 'anm':
+        #         prismData = KKN_Library.file_handling.get_prism_data('maya')
+        #         characterName = prismData['taskName'].split('-')[0]
 
-                if mc.objExists('M_Body_Root_Jnt_01'):
-                    rig = 'M_Body_Root_Jnt_01'
-                    ctrl = 'M_Body_Main_Ctrl_01'
-                    geo = 'M_Kika_Geom_Cnt_01'
-                elif mc.objExists(mc.ls('*:M_Root__JNT_01')[0]):
-                    rig = mc.ls('*:M_Root__JNT_01')[0]
-                    ctrl = mc.ls('*:M_Main__CTL_01')[0]
-                    geo = mc.ls("*:" + characterName + "_GRP")[0]
-                else:
-                    mc.error("No Rig Found")
+        #         if mc.objExists('M_Body_Root_Jnt_01'):
+        #             rig = 'M_Body_Root_Jnt_01'
+        #             ctrl = 'M_Body_Main_Ctrl_01'
+        #             geo = 'M_Kika_Geom_Cnt_01'
+        #         elif mc.objExists(mc.ls('*:M_Root__JNT_01')[0]):
+        #             rig = mc.ls('*:M_Root__JNT_01')[0]
+        #             ctrl = mc.ls('*:M_Main__CTL_01')[0]
+        #             geo = mc.ls("*:" + characterName + "_GRP")[0]
+        #         else:
+        #             mc.error("No Rig Found")
 
-                currStart = mc.playbackOptions(q=True, min=True)
-                currEnd = mc.playbackOptions(q=True, max=True)
-                mc.select(rig, r=True)
-                mc.select(geo, add=True)
+        #         currStart = mc.playbackOptions(q=True, min=True)
+        #         currEnd = mc.playbackOptions(q=True, max=True)
+        #         mc.select(rig, r=True)
+        #         mc.select(geo, add=True)
 
-                ymlData = ''
-                versionPath = prismData['globalProjectPath'] + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep
+        #         ymlData = ''
+        #         versionPath = prismData['globalProjectPath'] + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep
 
-                if os.path.exists(versionPath):
-                    fileList = os.listdir(versionPath)
-                    fileList.remove('master')
-                    newfileList = []
+        #         if os.path.exists(versionPath):
+        #             fileList = os.listdir(versionPath)
+        #             fileList.remove('master')
+        #             newfileList = []
 
-                    for i in fileList:
-                        i = int(i.split('_')[0][1:])
-                        newfileList.append(i)
-                    newfileList.sort()
+        #             for i in fileList:
+        #                 i = int(i.split('_')[0][1:])
+        #                 newfileList.append(i)
+        #             newfileList.sort()
 
-                    version = newfileList[-1] + 1
-                    version = 'v{:04d}'.format(version)
-                else:
-                    version = 'v0001'
+        #             version = newfileList[-1] + 1
+        #             version = 'v{:04d}'.format(version)
+        #         else:
+        #             version = 'v0001'
 
-                path = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + os.path.sep + 'Export' + \
-                    os.path.sep + prismData['taskName'] + os.path.sep + version + '__' + prismData['user'] + os.path.sep + 'centimeter' + os.path.sep
-                filename = path + 'shot' + '_' + prismData['assetName'] + '_' + prismData['taskName'] + '_' + version + '.fbx'
-                ymlPath = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + \
-                    os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep + version + '__' + prismData['user'] + os.path.sep
-                masterYmlPath = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + \
-                    os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep + 'master' + os.path.sep
-                masterPath = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + \
-                    os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep + 'master' + os.path.sep + 'centimeter' + os.path.sep
-                masterPath.replace('\\', os.path.sep)
-                masterFilename = masterPath + 'shot' + '_' + prismData['assetName'] + '_' + prismData['taskName'] + '_master.fbx'
+        #         path = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + os.path.sep + 'Export' + \
+        #             os.path.sep + prismData['taskName'] + os.path.sep + version + '__' + prismData['user'] + os.path.sep + 'centimeter' + os.path.sep
+        #         filename = path + 'shot' + '_' + prismData['assetName'] + '_' + prismData['taskName'] + '_' + version + '.fbx'
+        #         ymlPath = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + \
+        #             os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep + version + '__' + prismData['user'] + os.path.sep
+        #         masterYmlPath = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + \
+        #             os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep + 'master' + os.path.sep
+        #         masterPath = prismData['globalProjectPath'].replace('\\', os.path.sep) + os.path.sep + '03_Workflow' + os.path.sep + 'Shots' + os.path.sep + prismData['assetName'] + \
+        #             os.path.sep + 'Export' + os.path.sep + prismData['taskName'] + os.path.sep + 'master' + os.path.sep + 'centimeter' + os.path.sep
+        #         masterPath.replace('\\', os.path.sep)
+        #         masterFilename = masterPath + 'shot' + '_' + prismData['assetName'] + '_' + prismData['taskName'] + '_master.fbx'
 
-                ymlData += str(filename) + ', '
+        #         ymlData += str(filename) + ', '
 
-                KKN_Library.file_handling.create_dirs(path)
-                KKN_Library.file_handling.create_dirs(masterPath)
-                data = {
-                    'information': {
-                        'Version': version,
-                        'Source scene': prismData['filePath']
-                    },
-                    'filename': filename
-                }
-                PrismInit.pcore.writeYaml(ymlPath + 'versioninfo.yml', data)
-                PrismInit.pcore.writeYaml(masterYmlPath + 'versioninfo.yml', data)
-                # # Set Clip Range
-                # mc.playbackOptions(min=start, max=end)
-                # Configure Export
-                mel.eval('FBXResetExport;')
-                mel.eval('FBXExportGenerateLog -v false;')
-                mel.eval('FBXExportShapes -v true;')
-                mel.eval('FBXExportSkins -v true;')
-                mel.eval('FBXExportSkeletonDefinitions -v true;')
-                mel.eval('FBXExportBakeComplexAnimation -v true;')
-                mel.eval('FBXExportBakeComplexStart -v %s;' % currStart)
-                mel.eval('FBXExportBakeComplexEnd -v %s;' % currEnd)
-                #  Export FBX
-                filename = filename.replace(os.path.sep, '/')
-                masterFilename = masterFilename.replace(os.path.sep, '/')
-                mel.eval('file -force -options "v=0;" -typ "FBX export" -pr -es "%s";' % filename)
-                mel.eval('file -force -options "v=0;" -typ "FBX export" -pr -es "%s";' % masterFilename)
+        #         KKN_Library.file_handling.create_dirs(path)
+        #         KKN_Library.file_handling.create_dirs(masterPath)
+        #         data = {
+        #             'information': {
+        #                 'Version': version,
+        #                 'Source scene': prismData['filePath']
+        #             },
+        #             'filename': filename
+        #         }
+        #         PrismInit.pcore.writeYaml(ymlPath + 'versioninfo.yml', data)
+        #         PrismInit.pcore.writeYaml(masterYmlPath + 'versioninfo.yml', data)
+        #         # # Set Clip Range
+        #         # mc.playbackOptions(min=start, max=end)
+        #         # Configure Export
+        #         mel.eval('FBXResetExport;')
+        #         mel.eval('FBXExportGenerateLog -v false;')
+        #         mel.eval('FBXExportShapes -v true;')
+        #         mel.eval('FBXExportSkins -v true;')
+        #         mel.eval('FBXExportSkeletonDefinitions -v true;')
+        #         mel.eval('FBXExportBakeComplexAnimation -v true;')
+        #         mel.eval('FBXExportBakeComplexStart -v %s;' % currStart)
+        #         mel.eval('FBXExportBakeComplexEnd -v %s;' % currEnd)
+        #         #  Export FBX
+        #         filename = filename.replace(os.path.sep, '/')
+        #         masterFilename = masterFilename.replace(os.path.sep, '/')
+        #         mel.eval('file -force -options "v=0;" -typ "FBX export" -pr -es "%s";' % filename)
+        #         mel.eval('file -force -options "v=0;" -typ "FBX export" -pr -es "%s";' % masterFilename)
 
-                scenefile = prismData['filePath']
-                versionInfoPath = scenefile.split('.')[0] + 'versioninfo.yml'
-                PrismInit.pcore.setConfig("information", "export-path", ymlData, configPath=versionInfoPath)
+        #         scenefile = prismData['filePath']
+        #         versionInfoPath = scenefile.split('.')[0] + 'versioninfo.yml'
+        #         PrismInit.pcore.setConfig("information", "export-path", ymlData, configPath=versionInfoPath)
 
-                # Deselect and Reset Timeline
-                mc.select(cl=True)
-                mc.playbackOptions(min=currStart, max=currEnd)
+        #         # Deselect and Reset Timeline
+        #         mc.select(cl=True)
+        #         mc.playbackOptions(min=currStart, max=currEnd)
 
-                curveRad = 1
+        #         curveRad = 1
 
-                mc.sweepMeshFromCurve(ctrl)
-                mc.setAttr('sweepMeshCreator1.scaleProfileX', curveRad)
+        #         mc.sweepMeshFromCurve(ctrl)
+        #         mc.setAttr('sweepMeshCreator1.scaleProfileX', curveRad)
 
     @err_catcher(name=__name__)
     def postPlayblast(self, *args, **kwargs):
-        schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
+        pass
+        # schema = self.core.getConfig('ftrack', 'schema', configPath=self.core.prismIni)
 
-        if schema == 'CXL-Schema':
-            step = kwargs["scenefile"].split(os.path.sep)[-3]
-            if step == 'anm':
-                connections = mc.listConnections('sweepMeshCreator1')
-                mc.delete(connections[-1])
+        # if schema == 'CXL-Schema':
+        #     step = kwargs["scenefile"].split(os.path.sep)[-3]
+        #     if step == 'anm':
+        #         connections = mc.listConnections('sweepMeshCreator1')
+        #         mc.delete(connections[-1])
 
     @err_catcher(name=__name__)
     def preRender(self, *args, **kwargs):
