@@ -346,6 +346,7 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
             asset_name = curTask['name']
             asset = self.session.query('Asset where name is "{0}" and parent.id is "{1}"'.format(asset_name, curShot['id'])).first()
             asset_type = self.session.query('AssetType where name is "{0}"'.format('Upload')).one()  # Undedingt Ändern!!!
+            # status = self.session.query('Status where name is "{0}"'.format('Awaiting Approval CX')).one()
             status = self.session.query('Status where name is "{0}"'.format('Awaiting Client Approval')).one()
             version = self.taskVersion[1:5]
             local_location = self.session.query('Location where name is "ftrack.unmanaged"').one()
@@ -445,8 +446,10 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                 inputpath = self.core.fixPath(source[0])
                 soundfilePath = os.path.normpath(str(Path(os.path.dirname(inputpath)).parents[2]) + os.path.sep + "Incoming" + os.path.sep + "03_VR-Storyboard")
                 soundfilePath = self.core.convertPath(soundfilePath, 'global')
+                with open(os.path.join(soundfilePath, 'AudioStart.txt')) as f:
+                    lines = int(f.readlines()[0])
+                delay = frames_to_TC(self.startFrame - lines)
                 fullAudioFilePath = ''
-                delay = frames_to_TC(self.startFrame - 1000)
 
                 if os.path.exists(soundfilePath):
                     for file in os.listdir(soundfilePath):
