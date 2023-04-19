@@ -446,9 +446,13 @@ class ftrackPublish(QDialog, FtrackPublish_ui.Ui_dlg_ftrackPublish):
                 inputpath = self.core.fixPath(source[0])
                 soundfilePath = os.path.normpath(str(Path(os.path.dirname(inputpath)).parents[2]) + os.path.sep + "Incoming" + os.path.sep + "03_VR-Storyboard")
                 soundfilePath = self.core.convertPath(soundfilePath, 'global')
-                with open(os.path.join(soundfilePath, 'AudioStart.txt')) as f:
-                    lines = int(f.readlines()[0])
-                delay = frames_to_TC(self.startFrame - lines)
+                try:
+                    with open(os.path.join(soundfilePath, 'AudioStart.txt')) as f:
+                        lines = int(f.readlines()[0])
+                    delay = frames_to_TC(self.startFrame - lines)
+                except Exception:
+                    delay = frames_to_TC(self.startFrame - 1000)
+                    
                 fullAudioFilePath = ''
 
                 if os.path.exists(soundfilePath):
